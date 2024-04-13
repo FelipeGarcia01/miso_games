@@ -6,10 +6,10 @@ import esper
 from src.create.prefab_enemies_loader import enemies_loader_from_file
 from src.create.prefab_entities import create_world_entity
 from src.create.prefab_player_loader import player_loader_from_file
-from src.ecs.components.c_enemy_spawner import CEnemySpawner
-from src.ecs.components.c_player_spawner import CPlayerSpawner
+from src.ecs.components.c_input_command import CInputCommand
 from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
 from src.ecs.systems.s_movement import system_movement
+from src.ecs.systems.s_player_input import system_player_input
 from src.ecs.systems.s_player_spawner import system_player_spawner
 from src.ecs.systems.s_screen_bounce import system_screen_bounce
 
@@ -22,8 +22,10 @@ class GameEngine:
         self.delta_time = 0
         self.process_time = 0
         self.ecs_world = esper.World()
-        self.enemies = enemies_loader_from_file(enemies_path='assets/cfg/enemies.json', level_path='assets/cfg/level_01.json')
-        self.player = player_loader_from_file(players_path='assets/cfg/player.json', level_path='assets/cfg/level_01.json')
+        self.enemies = enemies_loader_from_file(enemies_path='assets/cfg/enemies.json',
+                                                level_path='assets/cfg/level_01.json')
+        self.player = player_loader_from_file(players_path='assets/cfg/player.json',
+                                              level_path='assets/cfg/level_01.json')
         with open('assets/cfg/window.json', 'r') as window_file:
             json_window = json.load(window_file)
             self.screen = pygame.display.set_mode(
@@ -44,6 +46,7 @@ class GameEngine:
     def _create(self):
         create_world_entity(self.ecs_world, "ENEMIES", self.enemies)
         create_world_entity(self.ecs_world, "PLAYER", self.player)
+        create_world_entity(self.ecs_world, "INPUT_COMMAND", "PLAYER_LEFT", pygame.K_LEFT)
 
     def _calculate_time(self):
         self.clock.tick(self.framerate)
@@ -52,6 +55,7 @@ class GameEngine:
 
     def _process_events(self):
         for event in pygame.event.get():
+            system_player_input(self.ecs_world, event, self._do_action)
             if event.type == pygame.QUIT:
                 self.is_running = False
 
@@ -68,3 +72,6 @@ class GameEngine:
 
     def _clean(self):
         pygame.quit()
+
+    def _do_action(self, c_input: CInputCommand):
+        print(f'{c_input.name} - {c_input.phase}')
