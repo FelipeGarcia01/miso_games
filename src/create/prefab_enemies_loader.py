@@ -45,11 +45,10 @@ def create_enemies_by_level(enemies_config: list, enemies_types: list) -> list:
     return sorted(enemies, key=lambda x: x['appear_at'])
 
 
-def load_form_files(enemies_path, level_path) -> list:
+def enemies_loader_from_file(enemies_path, level_path) -> list:
     with open(enemies_path, 'r') as enemies_loaded, open(level_path, 'r') as level_loaded:
         json_level = json.load(level_loaded)
         json_enemy = json.load(enemies_loaded)
-        enemies_types = list(
-            map(lambda enemy_type: build_enemy_data(json_enemy.get(enemy_type), enemy_type), json_enemy))
+        enemies_types = list(map(lambda enemy_type: build_enemy_data(json_enemy.get(enemy_type), enemy_type), json_enemy))
         enemies_config = list(map(lambda config: build_enemy_start_data(config), json_level["enemy_spawn_events"]))
     return create_enemies_by_level(enemies_config, enemies_types)
