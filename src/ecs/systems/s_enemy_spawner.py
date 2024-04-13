@@ -8,7 +8,7 @@ def system_enemy_spawner(world: esper.World, screen: pygame.Surface, process_tim
     c_e_s: CEnemySpawner
 
     for entity, (c_e_s, ) in components:
-        enemy_to_spawn_list = list(filter(lambda enemy: process_time > enemy.get('appear_at'), c_e_s.enemies))
+        enemy_to_spawn_list = list(filter(lambda enemy: process_time > enemy.get('appear_at') and not enemy.get('dead'), c_e_s.enemies))
         for enemy_to_spawn in enemy_to_spawn_list:
             screen.blit(enemy_to_spawn.get('surface'), enemy_to_spawn.get('position'))
             enemy_to_spawn['spawned'] = True
