@@ -4,6 +4,7 @@ import pygame
 
 import esper
 from src.create.prefab_enemies_loader import enemies_loader_from_file
+from src.create.prefab_entities import create_world_entity
 from src.create.prefab_player_loader import player_loader_from_file
 from src.ecs.components.c_enemy_spawner import CEnemySpawner
 from src.ecs.components.c_player_spawner import CPlayerSpawner
@@ -41,9 +42,8 @@ class GameEngine:
         self._clean()
 
     def _create(self):
-        cuad_entity = self.ecs_world.create_entity()
-        self.ecs_world.add_component(cuad_entity, CEnemySpawner(enemies=self.enemies))
-        self.ecs_world.add_component(cuad_entity, CPlayerSpawner(players=self.player))
+        create_world_entity(self.ecs_world, "ENEMIES", self.enemies)
+        create_world_entity(self.ecs_world, "PLAYER", self.player)
 
     def _calculate_time(self):
         self.clock.tick(self.framerate)
