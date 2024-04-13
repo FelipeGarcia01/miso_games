@@ -1,10 +1,9 @@
 import esper
 from src.ecs.components.c_enemy_spawner import CEnemySpawner
+from src.ecs.components.c_player_spawner import CPlayerSpawner
 
 
-
-
-def system_movement(world: esper.World, delta_time):
+def system_enemies_movement(world: esper.World, delta_time):
     components = world.get_components(CEnemySpawner)
     c_e_s: CEnemySpawner
 
@@ -14,3 +13,12 @@ def system_movement(world: esper.World, delta_time):
             enemy_spawned['position'].x += enemy_spawned['velocity'].x * delta_time
             enemy_spawned['position'].y += enemy_spawned['velocity'].y * delta_time
 
+
+def system_player_movement(world: esper, delta_time):
+    components = world.get_components(CPlayerSpawner)
+    c_p_s: CPlayerSpawner
+
+    for entity, (c_p_s,) in components:
+        player = c_p_s.players[0]
+        player['position'].x += player.get('velocity').x * delta_time
+        player['position'].y += player.get('velocity').y * delta_time

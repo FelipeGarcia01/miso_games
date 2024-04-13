@@ -11,10 +11,10 @@ def create_world_entity(world: esper.World, component_type: str, *args) -> int:
 
     if component_type.__eq__("ENEMIES"):
         world.add_component(cuad_entity, CEnemySpawner(enemies=args[0]))
-        world.add_component(cuad_entity, CEnemyTag)
+        world.add_component(cuad_entity, CEnemyTag())
     if component_type.__eq__("PLAYER"):
         world.add_component(cuad_entity, CPlayerSpawner(players=args[0]))
-        world.add_component(cuad_entity, CPlayerTag)
+        world.add_component(cuad_entity, CPlayerTag())
     if component_type.__eq__("INPUT_COMMAND"):
         world.add_component(cuad_entity, CInputCommand(name=args[0], key=args[1]))
 
