@@ -12,6 +12,7 @@ from src.ecs.components.c_player_spawner import CPlayerSpawner
 from src.ecs.systems.s_bullet_screen import system_bullet_screen
 from src.ecs.systems.s_bullet_spawner import system_bullet_spawner
 from src.ecs.systems.s_collision_player_enemy import system_collision_player_enemy
+from src.ecs.systems.s_enemy_dead import system_enemy_dead
 from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
 from src.ecs.systems.s_movement import system_enemies_movement, system_player_movement, system_bullet_movement
 from src.ecs.systems.s_player_input import system_player_input
@@ -79,6 +80,8 @@ class GameEngine:
         system_enemies_screen_bounce(self.ecs_world, self.screen)
         system_players_screen_bounce(self.ecs_world, self.screen)
         system_collision_player_enemy(self.ecs_world, (self.level_width, self.level_height))
+        system_enemy_dead(self.ecs_world)
+        self.ecs_world._clear_dead_entities()
 
     def _draw(self):
         self.screen.fill(
