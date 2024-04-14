@@ -39,8 +39,7 @@ def create_enemies_by_level(enemies_config: list, enemies_types: list) -> list:
                 color=enemy.get('color'),
                 velocity=pygame.Vector2(velocity, velocity),
                 appear_at=enemy_config.get('appear_at'),
-                spawned=False,
-                dead=False
+                spawned=False
             )
         )
     return sorted(enemies, key=lambda x: x['appear_at'])
