@@ -7,6 +7,7 @@ from src.create.prefab_bullet_loader import bullet_loader_from_file
 from src.create.prefab_enemies_loader import enemies_loader_from_file
 from src.create.prefab_entities import create_world_entity
 from src.create.prefab_player_loader import player_loader_from_file
+from src.ecs.components.c_bullet_spawner import CBulletSpawner
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 from src.ecs.components.c_player_spawner import CPlayerSpawner
 from src.ecs.systems.s_bullet_screen import system_bullet_screen
@@ -124,4 +125,5 @@ class GameEngine:
             player = player_component.players[0]
             bullet = bullet_loader_from_file(bullet_path='assets/cfg/bullet.json', player=player,
                                              level_path='assets/cfg/level_01.json', mouse_pos=pygame.mouse.get_pos())
-            create_world_entity(self.ecs_world, "BULLET", bullet)
+            if len(self.ecs_world.get_component(CBulletSpawner)) < bullet.get("max_bullets"):
+                create_world_entity(self.ecs_world, "BULLET", bullet)
