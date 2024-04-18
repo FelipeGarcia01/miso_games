@@ -21,20 +21,20 @@ def build_player_start_data(config, level):
     return dict(position=player_start_position)
 
 
-def create_player_by_level(player_start_data: dict, player_data: dict) -> list:
+def create_player_by_level(player_start_data: dict, player_data: dict) -> dict:
     surf = pygame.Surface(player_data.get('size'))
     surf.fill(player_data.get('color'))
-    return [dict(
+    return dict(
         position=player_start_data.get('position'),
         surface=surf,
         size=player_data.get('size'),
         color=player_data.get('color'),
         velocity=pygame.Vector2(0, 0),
         max_velocity=player_data.get('velocity')
-    )]
+    )
 
 
-def player_loader_from_file(players_path, level_path) -> list:
+def player_loader_from_file(players_path, level_path) -> dict:
     with open(players_path, 'r') as players_loaded, open(level_path, 'r') as level_loaded:
         json_level = json.load(level_loaded)
         json_player = json.load(players_loaded)
