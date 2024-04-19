@@ -1,14 +1,19 @@
 import pygame
 import esper
+from src.create.prefab_entities import create_world_entity
 from src.ecs.components.c_enemy_spawner import CEnemySpawner
 
 
-def system_enemy_spawner(world: esper.World, screen: pygame.Surface, process_time: float):
-    components = world.get_components(CEnemySpawner)
-    c_e_s: CEnemySpawner
-
-    for entity, (c_e_s, ) in components:
-        enemy_to_spawn_list = list(filter(lambda enemy: process_time > enemy.get('appear_at'), c_e_s.enemies))
-        for enemy_to_spawn in enemy_to_spawn_list:
-            screen.blit(enemy_to_spawn.get('surface'), enemy_to_spawn.get('position'))
-            enemy_to_spawn['spawned'] = True
+def system_enemy_spawner(world: esper.World, enemies: list, process_time: float):
+    enemies_to_spawn_list = list(
+        filter(
+            lambda enemy:
+            process_time > enemy.get('appear_at') and not enemy.get('spawned'),
+            enemies
+        )
+    )
+    for enemy_to_spawn in enemies_to_spawn_list:
+        create_world_entity(world=world, component_type="ENEMIES", size=enemy_to_spawn.get('size'),
+                            position=enemy_to_spawn.get('position'), color=enemy_to_spawn.get('color'),
+                            velocity=enemy_to_spawn.get('velocity'))
+        enemy_to_spawn['spawned'] = True

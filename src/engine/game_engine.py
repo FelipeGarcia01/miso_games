@@ -89,6 +89,7 @@ class GameEngine:
         system_screen_bounce(self.ecs_world, self.screen)
         system_players_screen_bounce(self.ecs_world, self.screen)
         system_bullet_screen(self.ecs_world, self.screen)
+        system_enemy_spawner(self.ecs_world, self.enemies, self.process_time)
         # system_enemies_movement(self.ecs_world, self.delta_time)
         # system_player_movement(self.ecs_world, self.delta_time)
         # system_bullet_movement(self.ecs_world, self.delta_time)
@@ -100,7 +101,6 @@ class GameEngine:
     def _draw(self):
         self.screen.fill(
             (self.background_color.get('r'), self.background_color.get('g'), self.background_color.get('b')))
-        # system_enemy_spawner(self.ecs_world, self.screen, self.process_time)
         # system_player_spawner(self.ecs_world, self.screen)
         # system_bullet_spawner(self.ecs_world, self.screen)
         system_rendering(self.ecs_world, self.screen)
