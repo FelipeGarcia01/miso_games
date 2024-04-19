@@ -30,10 +30,6 @@ class GameEngine:
         self.delta_time = 0
         self.process_time = 0
         self.ecs_world = esper.World()
-        self.enemies = enemies_loader_from_file(enemies_path='assets/cfg/enemies.json',
-                                                level_path='assets/cfg/level_01.json')
-        self.player_cfg = player_loader_from_file(players_path='assets/cfg/player.json',
-                                                  level_path='assets/cfg/level_01.json')
         with open('assets/cfg/window.json', 'r') as window_file, open('assets/cfg/level_01.json', 'r') as level_loaded:
             json_window = json.load(window_file)
             level_pos = json.load(level_loaded)
@@ -43,6 +39,10 @@ class GameEngine:
                                                   pygame.SCALED)
             self.framerate = json_window.get('framerate')
             self.background_color = json_window.get('bg_color')
+            self.enemies = enemies_loader_from_file(enemies_path='assets/cfg/enemies.json',
+                                                    level_path='assets/cfg/level_01.json')
+            self.player_cfg = player_loader_from_file(players_path='assets/cfg/player.json',
+                                                      level_path='assets/cfg/level_01.json')
 
     def run(self) -> None:
         self._create()
@@ -56,7 +56,8 @@ class GameEngine:
 
     def _create(self):
         self.players_entity = create_world_entity(world=self.ecs_world, component_type="PLAYER",
-                                                  size=self.player_cfg['size'], color=self.player_cfg['color'],
+                                                  size=self.player_cfg['size'],
+                                                  image_loaded=self.player_cfg.get('image'),
                                                   position=self.player_cfg['position'],
                                                   velocity=self.player_cfg['velocity'])
         create_world_entity(world=self.ecs_world, component_type="INPUT_COMMAND", name="PLAYER_LEFT", key=pygame.K_LEFT)

@@ -21,7 +21,8 @@ def create_world_entity(world: esper.World, component_type: str, **kargs) -> int
         world.add_component(cuad_entity, CVelocity(kargs.get('velocity')))
         world.add_component(cuad_entity, CEnemyTag())
     if component_type.__eq__("PLAYER"):
-        world.add_component(cuad_entity, CSurface(kargs.get('size'), kargs.get('color')))
+        image_loaded: pygame.Surface = kargs.get('image_loaded')
+        world.add_component(cuad_entity, CSurface.from_surface(image_loaded))
         world.add_component(cuad_entity, CTransform(kargs.get('position')))
         world.add_component(cuad_entity, CVelocity(kargs.get('velocity')))
         world.add_component(cuad_entity, CPlayerTag())
