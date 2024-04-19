@@ -15,7 +15,7 @@ def system_movement(world: esper.World, delta_time: float):
         c_t.pos.x += c_v.vel.x * delta_time
         c_t.pos.y += c_v.vel.y * delta_time
 
-
+"""
 def system_enemies_movement(world: esper.World, delta_time):
     components = world.get_components(CEnemySpawner)
     c_e_s: CEnemySpawner
@@ -45,3 +45,4 @@ def system_bullet_movement(world: esper, delta_time):
         bullet = c_b_s.bullet
         bullet['position'].x += bullet.get('velocity').x * delta_time
         bullet['position'].y += bullet.get('velocity').y * delta_time
+"""
