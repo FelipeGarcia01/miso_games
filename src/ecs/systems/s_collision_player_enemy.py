@@ -1,20 +1,24 @@
 import esper
 from src.ecs.components.c_enemy_spawner import CEnemySpawner
 from src.ecs.components.c_player_spawner import CPlayerSpawner
+from src.ecs.components.c_surface import CSurface
+from src.ecs.components.c_transform import CTransform
+from src.ecs.components.tags.c_enemy_tag import CEnemyTag
 
 
-def system_collision_player_enemy(world:esper.World, screen_config: tuple):
-    player_spawner = world.get_component(CPlayerSpawner)
-    player = player_spawner[0][1].players[0]
-    player_rect = player.get('surface').get_rect(topleft=player.get('position'))
+def system_collision_player_enemy(world: esper.World, player: int, screen_config: tuple):
+    components = world.get_components(CSurface, CTransform, CEnemyTag)
+    player_position = world.component_for_entity(player, CTransform)
+    player_surface = world.component_for_entity(player, CSurface)
+    player_rect = player_surface.surf.get_rect(topleft=player_position.pos)
 
-    components = world.get_components(CEnemySpawner)
-    c_e_s: CEnemySpawner
+    c_s: CSurface
+    c_t: CTransform
 
-    for enemy_entity, (c_e_s, ) in components:
-        for enemy in c_e_s.enemies:
-            enemy_rect = enemy.get('surface').get_rect(topleft=enemy.get('position'))
-            if enemy_rect.colliderect(player_rect):
-                c_e_s.enemies.remove(enemy)
-                player['position'].x = screen_config[0] - player['surface'].get_width() / 2
-                player['position'].y = screen_config[1] - player['surface'].get_height() / 2
+    for enemy_entity, (c_s, c_t, _) in components:
+        enemy_rect = c_s.surf.get_rect(topleft=c_t.pos)
+        if player_rect.colliderect(enemy_rect):
+            world.delete_entity(enemy_entity)
+            player_position.pos.x = screen_config[0] - player_surface.surf.get_width() / 2
+            player_position.pos.y = screen_config[1] - player_surface.surf.get_height() / 2
+
