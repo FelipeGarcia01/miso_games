@@ -10,6 +10,7 @@ def build_player_data(player):
     return dict(
         size=pygame.Vector2(size[0], size[1]),
         image=image,
+        animations=player.get('animations'),
         velocity=player.get('input_velocity')
     )
 
@@ -23,6 +24,7 @@ def build_player_start_data(level, size):
 
 def create_player_by_level(player_start_data: dict, player_data: dict) -> dict:
     return dict(
+        animations=player_data.get('animations'),
         position=player_start_data.get('position'),
         image=player_data.get('image'),
         size=player_data.get('size'),

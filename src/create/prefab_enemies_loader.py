@@ -28,7 +28,7 @@ def create_enemies_by_level(enemies_config: list, enemies_types: list) -> list:
             dict(
                 type=enemy.get('type'),
                 position=enemy_config.get('position'),
-                image=enemy.get('image'),
+                image=pygame.image.load(enemy.get('image')).convert_alpha(),
                 velocity=pygame.Vector2(velocity, velocity),
                 appear_at=enemy_config.get('appear_at'),
                 spawned=False

@@ -11,7 +11,7 @@ def build_bullet_data(bullet, level, mouse_pos, player_pos, player_size):
     velocity = velocity.normalize() * bullet.get("velocity")
     return dict(
         position=pygame.Vector2(pos_on_x, pos_on_y),
-        image=bullet.get('image'),
+        image=pygame.image.load(bullet.get('image')).convert_alpha(),
         velocity=velocity,
         max_bullets=level.get("player_spawn").get("max_bullets"))
 
