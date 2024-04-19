@@ -10,7 +10,10 @@ from src.create.prefab_player_loader import player_loader_from_file
 from src.ecs.components.c_bullet_spawner import CBulletSpawner
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 from src.ecs.components.c_player_spawner import CPlayerSpawner
+from src.ecs.components.c_surface import CSurface
+from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
+from src.ecs.components.tags.c_bullet_tag import CBulletTag
 from src.ecs.components.tags.c_player_tag import CPlayerTag
 from src.ecs.systems.s_bullet_screen import system_bullet_screen
 from src.ecs.systems.s_bullet_spawner import system_bullet_spawner
@@ -85,14 +88,14 @@ class GameEngine:
         system_movement(self.ecs_world, self.delta_time)
         system_screen_bounce(self.ecs_world, self.screen)
         system_players_screen_bounce(self.ecs_world, self.screen)
+        system_bullet_screen(self.ecs_world, self.screen)
         # system_enemies_movement(self.ecs_world, self.delta_time)
         # system_player_movement(self.ecs_world, self.delta_time)
         # system_bullet_movement(self.ecs_world, self.delta_time)
-        # system_bullet_screen(self.ecs_world, self.screen)
         # system_enemies_screen_bounce(self.ecs_world, self.screen)
         # system_collision_player_enemy(self.ecs_world, (self.level_width, self.level_height))
         # system_enemy_dead(self.ecs_world)
-        # self.ecs_world._clear_dead_entities()
+        self.ecs_world._clear_dead_entities()
 
     def _draw(self):
         self.screen.fill(
@@ -130,10 +133,18 @@ class GameEngine:
                 velocity.y += self.player_cfg.get('max_velocity', 0)
             if c_input.phase == CommandPhase.END:
                 velocity.y -= self.player_cfg.get('max_velocity', 0)
-        # if c_input.name == "PLAYER_FIRE":
-        #    player_component = self.ecs_world.component_for_entity(self.players_entity, CPlayerSpawner)
-        #    player = player_component.players[0]
-        #    bullet = bullet_loader_from_file(bullet_path='assets/cfg/bullet.json', player=player,
-        #                                     level_path='assets/cfg/level_01.json', mouse_pos=pygame.mouse.get_pos())
-        #    if len(self.ecs_world.get_component(CBulletSpawner)) < bullet.get("max_bullets"):
-        #        create_world_entity(self.ecs_world, "BULLET", bullet)
+        if c_input.name == "PLAYER_FIRE":
+            player_pos = self.ecs_world.component_for_entity(self.players_entity, CTransform)
+            player_size = self.ecs_world.component_for_entity(self.players_entity, CSurface)
+            player_rect = player_size.surf.get_rect(topleft=player_pos.pos)
+            bullet = bullet_loader_from_file(
+                bullet_path='assets/cfg/bullet.json',
+                level_path='assets/cfg/level_01.json',
+                mouse_pos=pygame.mouse.get_pos(),
+                player_pos=player_pos.pos,
+                player_size=player_rect
+            )
+            if len(self.ecs_world.get_component(CBulletTag)) < bullet.get("max_bullets"):
+                create_world_entity(world=self.ecs_world, component_type="BULLET", size=bullet.get('size'),
+                                    position=bullet.get('position'), color=bullet.get('color'),
+                                    velocity=bullet.get('velocity'))
