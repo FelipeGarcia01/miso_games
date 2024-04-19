@@ -1,7 +1,6 @@
-import pygame
+
 import esper
 from src.create.prefab_entities import create_world_entity
-from src.ecs.components.c_enemy_spawner import CEnemySpawner
 
 
 def system_enemy_spawner(world: esper.World, enemies: list, process_time: float):

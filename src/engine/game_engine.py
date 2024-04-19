@@ -7,22 +7,17 @@ from src.create.prefab_bullet_loader import bullet_loader_from_file
 from src.create.prefab_enemies_loader import enemies_loader_from_file
 from src.create.prefab_entities import create_world_entity
 from src.create.prefab_player_loader import player_loader_from_file
-from src.ecs.components.c_bullet_spawner import CBulletSpawner
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
-from src.ecs.components.c_player_spawner import CPlayerSpawner
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.tags.c_bullet_tag import CBulletTag
-from src.ecs.components.tags.c_player_tag import CPlayerTag
 from src.ecs.systems.s_bullet_screen import system_bullet_screen
-from src.ecs.systems.s_bullet_spawner import system_bullet_spawner
 from src.ecs.systems.s_collision_player_enemy import system_collision_player_enemy
 from src.ecs.systems.s_enemy_dead import system_enemy_dead
 from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
 from src.ecs.systems.s_movement import system_movement
 from src.ecs.systems.s_player_input import system_player_input
-from src.ecs.systems.s_player_spawner import system_player_spawner
 from src.ecs.systems.s_rendering import system_rendering
 from src.ecs.systems.s_screen_bounce import system_screen_bounce, system_players_screen_bounce
 
@@ -60,7 +55,6 @@ class GameEngine:
         self._clean()
 
     def _create(self):
-        # self.enemies_entity = create_world_entity(self.ecs_world, "ENEMIES", self.enemies)
         self.players_entity = create_world_entity(world=self.ecs_world, component_type="PLAYER",
                                                   size=self.player_cfg['size'], color=self.player_cfg['color'],
                                                   position=self.player_cfg['position'],
@@ -92,17 +86,11 @@ class GameEngine:
         system_enemy_spawner(self.ecs_world, self.enemies, self.process_time)
         system_collision_player_enemy(self.ecs_world, self.players_entity, (self.level_width, self.level_height))
         system_enemy_dead(self.ecs_world)
-        # system_enemies_movement(self.ecs_world, self.delta_time)
-        # system_player_movement(self.ecs_world, self.delta_time)
-        # system_bullet_movement(self.ecs_world, self.delta_time)
-        # system_enemies_screen_bounce(self.ecs_world, self.screen)
         self.ecs_world._clear_dead_entities()
 
     def _draw(self):
         self.screen.fill(
             (self.background_color.get('r'), self.background_color.get('g'), self.background_color.get('b')))
-        # system_player_spawner(self.ecs_world, self.screen)
-        # system_bullet_spawner(self.ecs_world, self.screen)
         system_rendering(self.ecs_world, self.screen)
         pygame.display.flip()
 

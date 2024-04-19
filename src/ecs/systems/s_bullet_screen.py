@@ -1,7 +1,6 @@
 import pygame
 
 import esper
-from src.ecs.components.c_bullet_spawner import CBulletSpawner
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.tags.c_bullet_tag import CBulletTag

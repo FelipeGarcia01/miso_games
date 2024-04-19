@@ -1,6 +1,4 @@
 import esper
-from src.ecs.components.c_enemy_spawner import CEnemySpawner
-from src.ecs.components.c_player_spawner import CPlayerSpawner
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.tags.c_enemy_tag import CEnemyTag
