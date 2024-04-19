@@ -11,7 +11,7 @@ from src.ecs.components.tags.c_player_tag import CPlayerTag
 def create_world_entity(world: esper.World, component_type: str, **kargs) -> int:
     cuad_entity = world.create_entity()
     if component_type.__eq__("ENEMIES"):
-        world.add_component(cuad_entity, CSurface(kargs['size'], kargs['color']))
+        # world.add_component(cuad_entity, CSurface(kargs['size'], kargs['color']))
         world.add_component(cuad_entity, CTransform(kargs['position']))
         world.add_component(cuad_entity, CVelocity(kargs['velocity']))
         world.add_component(cuad_entity, CEnemyTag())
