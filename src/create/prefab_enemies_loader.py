@@ -7,28 +7,28 @@ import pygame
 def build_enemy_data(enemy, enemy_type):
     return dict(
         type=enemy_type,
-        min_velocity=enemy['velocity_min'],
-        max_velocity=enemy['velocity_max'])
+        image=enemy.get('image'),
+        min_velocity=enemy.get('velocity_min'),
+        max_velocity=enemy.get('velocity_max')
+    )
 
 
 def build_enemy_start_data(config):
-    enemy_start_position = pygame.Vector2(config['position']['x'], config['position']['y'])
-    enemy_appear_at = config['time']
-    return dict(type=config['enemy_type'], position=enemy_start_position, appear_at=enemy_appear_at)
+    enemy_start_position = pygame.Vector2(config.get('position').get('x'), config.get('position').get('y'))
+    enemy_appear_at = config.get('time')
+    return dict(type=config.get('enemy_type'), position=enemy_start_position, appear_at=enemy_appear_at)
 
 
 def create_enemies_by_level(enemies_config: list, enemies_types: list) -> list:
     enemies: list = []
     for enemy_config in enemies_config:
         enemy = next(filter(lambda enemy_type: enemy_config.get('type').__eq__(enemy_type.get('type')), enemies_types))
-        surf = pygame.Surface(enemy.get('size', (0, 0)))
-        surf.fill(enemy.get('color', (0, 0)))
-        velocity = random.choice([enemy['min_velocity'], enemy['max_velocity']]) * random.choice([-1, 1])
+        velocity = random.choice([enemy.get('min_velocity'), enemy.get('max_velocity')]) * random.choice([-1, 1])
         enemies.append(
             dict(
                 type=enemy.get('type'),
                 position=enemy_config.get('position'),
-                surface=surf,
+                image=enemy.get('image'),
                 velocity=pygame.Vector2(velocity, velocity),
                 appear_at=enemy_config.get('appear_at'),
                 spawned=False
