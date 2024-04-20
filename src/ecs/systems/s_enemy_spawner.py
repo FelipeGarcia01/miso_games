@@ -12,8 +12,21 @@ def system_enemy_spawner(world: esper.World, enemies: list, process_time: float)
         )
     )
     for enemy_to_spawn in enemies_to_spawn_list:
-        create_world_entity(world=world, component_type="ENEMIES",
-                            position=enemy_to_spawn.get('position'),
-                            velocity=enemy_to_spawn.get('velocity'),
-                            image=enemy_to_spawn.get('image'))
-        enemy_to_spawn['spawned'] = True
+
+        if not 'Hunter'.__eq__(enemy_to_spawn.get('type')):
+            create_world_entity(world=world,
+                                component_type="ASTEROID",
+                                position=enemy_to_spawn.get('position'),
+                                velocity=enemy_to_spawn.get('velocity'),
+                                image=enemy_to_spawn.get('image'))
+            enemy_to_spawn['spawned'] = True
+        else:
+            create_world_entity(world=world,
+                                component_type="HUNTER",
+                                position=enemy_to_spawn.get('position'),
+                                velocity=enemy_to_spawn.get('velocity'),
+                                image=enemy_to_spawn.get('image'),
+                                animations=enemy_to_spawn.get('animations')
+                                )
+
+

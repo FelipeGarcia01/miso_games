@@ -22,7 +22,7 @@ def _set_animation(c_a: CAnimation, state: int):
 
     c_a.current_animation = state
     c_a.current_animation_time = 0
-    c_a.current_frame = c_a.current_frame = c_a.animations_list[c_a.current_animation].start
+    c_a.current_frame = c_a.animations_list[c_a.current_animation].start
 
 
 def system_player_state(world: esper.World):
