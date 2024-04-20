@@ -8,8 +8,13 @@ def build_enemy_data(enemy, enemy_type):
     return dict(
         type=enemy_type,
         image=enemy.get('image'),
-        min_velocity=enemy.get('velocity_min'),
-        max_velocity=enemy.get('velocity_max')
+        animations=enemy.get('animations', {}),
+        velocity_chase=enemy.get('velocity_chase', 0),
+        velocity_return=enemy.get('velocity_return', 0),
+        distance_start_chase=enemy.get('distance_start_chase', 0),
+        distance_start_return=enemy.get('distance_start_return', 0),
+        min_velocity=enemy.get('velocity_min', 0),
+        max_velocity=enemy.get('velocity_max', 0)
     )
 
 
@@ -42,6 +47,14 @@ def enemies_loader_from_file(enemies_path, level_path) -> list:
         json_level = json.load(level_loaded)
         json_enemy = json.load(enemies_loaded)
         enemies_types = list(
-            map(lambda enemy_type: build_enemy_data(json_enemy.get(enemy_type), enemy_type), json_enemy))
-        enemies_config = list(map(lambda config: build_enemy_start_data(config), json_level["enemy_spawn_events"]))
+            map(
+                lambda enemy_type: build_enemy_data(json_enemy.get(enemy_type), enemy_type),
+                json_enemy
+            )
+        )
+        enemies_config = list(
+            map(
+                lambda config: build_enemy_start_data(config), json_level["enemy_spawn_events"]
+            )
+        )
     return create_enemies_by_level(enemies_config, enemies_types)
