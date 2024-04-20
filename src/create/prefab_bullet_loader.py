@@ -5,13 +5,17 @@ import pygame
 
 
 def build_bullet_data(bullet, level, mouse_pos, player_pos, player_size):
-    pos_on_x = player_pos.x + player_size.width / 2
-    pos_on_y = player_pos.y + player_size.height / 2
-    velocity = (mouse_pos - player_pos)
+    image_surface = pygame.image.load(bullet.get('image')).convert_alpha()
+    bullet_size = image_surface.get_rect().size
+    pos_on_x = player_pos.x + (player_size[0] / 2) - (bullet_size[0] / 2)
+    pos_on_y = player_pos.y + (player_size[1] / 2) - (bullet_size[1] / 2)
+    player_pos_center = pygame.Vector2(player_pos.x + (player_size[0] / 2),
+                                       player_pos.y + (player_size[1] / 2))
+    velocity = (mouse_pos - player_pos_center)
     velocity = velocity.normalize() * bullet.get("velocity")
     return dict(
         position=pygame.Vector2(pos_on_x, pos_on_y),
-        image=pygame.image.load(bullet.get('image')).convert_alpha(),
+        image=image_surface,
         velocity=velocity,
         max_bullets=level.get("player_spawn").get("max_bullets"))
 

@@ -7,8 +7,9 @@ import pygame
 def build_player_data(player):
     image = pygame.image.load(player.get('image')).convert_alpha()
     size = image.get_size()
+    size_x = size[0] / player.get('animations').get('number_frames')
     return dict(
-        size=pygame.Vector2(size[0], size[1]),
+        size=pygame.Vector2(size_x, size[1]),
         image=image,
         animations=player.get('animations'),
         velocity=player.get('input_velocity')

@@ -12,6 +12,7 @@ from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.tags.c_bullet_tag import CBulletTag
+from src.ecs.systems.s_animation import system_animation
 from src.ecs.systems.s_bullet_screen import system_bullet_screen
 from src.ecs.systems.s_collision_player_enemy import system_collision_player_enemy
 from src.ecs.systems.s_enemy_dead import system_enemy_dead
@@ -86,6 +87,7 @@ class GameEngine:
         system_bullet_screen(self.ecs_world, self.screen)
         system_enemy_spawner(self.ecs_world, self.enemies, self.process_time)
         system_collision_player_enemy(self.ecs_world, self.players_entity, (self.level_width, self.level_height))
+        system_animation(self.ecs_world, self.delta_time)
         system_enemy_dead(self.ecs_world)
         self.ecs_world._clear_dead_entities()
 
@@ -125,7 +127,7 @@ class GameEngine:
         if c_input.name == "PLAYER_FIRE":
             player_pos = self.ecs_world.component_for_entity(self.players_entity, CTransform)
             player_size = self.ecs_world.component_for_entity(self.players_entity, CSurface)
-            player_rect = player_size.surf.get_rect(topleft=player_pos.pos)
+            player_rect = player_size.area.size
             bullet = bullet_loader_from_file(
                 bullet_path='assets/cfg/bullet.json',
                 level_path='assets/cfg/level_01.json',
@@ -134,6 +136,8 @@ class GameEngine:
                 player_size=player_rect
             )
             if len(self.ecs_world.get_component(CBulletTag)) < bullet.get("max_bullets"):
-                create_world_entity(world=self.ecs_world, component_type="BULLET", image=bullet.get('image'),
+                create_world_entity(world=self.ecs_world,
+                                    component_type="BULLET",
+                                    image=bullet.get('image'),
                                     position=bullet.get('position'),
                                     velocity=bullet.get('velocity'))
