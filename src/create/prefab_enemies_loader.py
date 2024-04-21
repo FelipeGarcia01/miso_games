@@ -22,9 +22,10 @@ def build_enemy_data(enemy, enemy_type):
 
 
 def build_enemy_start_data(config):
-    enemy_start_position = pygame.Vector2(config.get('position').get('x'), config.get('position').get('y'))
+    enemy_position = pygame.Vector2(config.get('position').get('x'), config.get('position').get('y'))
     enemy_appear_at = config.get('time')
-    return dict(type=config.get('enemy_type'), position=enemy_start_position, appear_at=enemy_appear_at)
+    return dict(type=config.get('enemy_type'), position=enemy_position, start_position=enemy_position.copy(),
+                appear_at=enemy_appear_at)
 
 
 def create_enemies_by_level(enemies_config: list, enemies_types: list) -> list:
@@ -36,6 +37,7 @@ def create_enemies_by_level(enemies_config: list, enemies_types: list) -> list:
             dict(
                 type=enemy.get('type'),
                 position=enemy_config.get('position'),
+                start_position=enemy_config.get('start_position'),
                 image=enemy.get('image'),
                 image_size=enemy.get('image_size'),
                 velocity=pygame.Vector2(velocity, velocity),

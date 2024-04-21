@@ -13,4 +13,4 @@ class CHunterState:
     def __init__(self, hunter_enemy: dict, position: pygame.Vector2) -> None:
         self.hunter_enemy = hunter_enemy
         self.state = HunterState.IDLE
-        self.position = position
+        self.position = position.copy()

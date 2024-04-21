@@ -93,7 +93,7 @@ class GameEngine:
         system_enemy_dead(self.ecs_world)
         system_animation(self.ecs_world, self.delta_time)
         system_player_state(self.ecs_world)
-        #system_hunter_state(self.ecs_world, self.players_entity)
+        system_hunter_state(self.ecs_world, self.players_entity)
         self.ecs_world._clear_dead_entities()
 
 
