@@ -9,8 +9,8 @@ from src.ecs.components.tags.c_player_tag import CPlayerTag
 
 
 def system_screen_bounce(world: esper.World, screen: pygame.Surface):
-    screen_rect = screen.get_rect()
     components = world.get_components(CTransform, CVelocity, CSurface, CEnemyTag)
+    screen_rect = screen.get_rect()
 
     c_t: CTransform
     c_v: CVelocity
