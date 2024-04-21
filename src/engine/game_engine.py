@@ -85,15 +85,16 @@ class GameEngine:
 
     def _update(self):
         system_movement(self.ecs_world, self.delta_time)
-        system_players_screen_bounce(self.ecs_world, self.screen)
         system_screen_bounce(self.ecs_world, self.screen)
-        system_bullet_screen(self.ecs_world, self.screen)
-        system_enemy_spawner(self.ecs_world, self.enemies, self.process_time)
+        system_players_screen_bounce(self.ecs_world, self.screen)
+
+        #system_bullet_screen(self.ecs_world, self.screen)
         system_collision_player_enemy(self.ecs_world, self.players_entity, (self.level_width, self.level_height))
-        system_animation(self.ecs_world, self.delta_time)
         #system_player_state(self.ecs_world)
         #system_hunter_state(self.ecs_world, self.players_entity)
         #system_enemy_dead(self.ecs_world)
+        system_enemy_spawner(self.ecs_world, self.enemies, self.process_time)
+        system_animation(self.ecs_world, self.delta_time)
         self.ecs_world._clear_dead_entities()
 
 

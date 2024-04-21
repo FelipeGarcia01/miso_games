@@ -15,8 +15,7 @@ def system_collision_player_enemy(world: esper.World, player: int, screen_config
 
     for enemy_entity, (c_s, c_t, _) in components:
         enemy_rect = CSurface.get_area_relative(c_s.area, c_t.pos)
-
-        if player_rect.colliderect(enemy_rect):
+        if enemy_rect.colliderect(player_rect):
             world.delete_entity(enemy_entity)
             player_position.pos.x = screen_config[0] - player_surface.surf.get_width() / 2
             player_position.pos.y = screen_config[1] - player_surface.surf.get_height() / 2
