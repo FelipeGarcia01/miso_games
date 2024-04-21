@@ -12,6 +12,7 @@ from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.tags.c_bullet_tag import CBulletTag
 from src.ecs.components.tags.c_enemy_tag import CEnemyTag, EnemyType
+from src.ecs.components.tags.c_explosion_tag import CExplosionTag
 from src.ecs.components.tags.c_player_tag import CPlayerTag
 
 
@@ -43,6 +44,12 @@ def create_world_entity(world: esper.World, component_type: str, **kargs) -> int
         world.add_component(cuad_entity, CTransform(kargs.get('position')))
         world.add_component(cuad_entity, CVelocity(kargs.get('velocity')))
         world.add_component(cuad_entity, CBulletTag())
+    if component_type.__eq__("EXPLOSION"):
+        world.add_component(cuad_entity, img_surf)
+        world.add_component(cuad_entity, CTransform(kargs.get('position')))
+        world.add_component(cuad_entity, CVelocity(pygame.Vector2(0,0)))
+        world.add_component(cuad_entity, CAnimation(kargs.get('animations')))
+        world.add_component(cuad_entity, CExplosionTag())
     if component_type.__eq__("INPUT_COMMAND"):
         world.add_component(cuad_entity, CInputCommand(name=kargs.get('name'), key=kargs.get('key')))
 

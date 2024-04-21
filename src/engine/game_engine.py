@@ -6,6 +6,7 @@ import esper
 from src.create.prefab_bullet_loader import bullet_loader_from_file
 from src.create.prefab_enemies_loader import enemies_loader_from_file
 from src.create.prefab_entities import create_world_entity
+from src.create.prefab_explosion import explosion_loader_from_file
 from src.create.prefab_player_loader import player_loader_from_file
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 from src.ecs.components.c_surface import CSurface
@@ -17,6 +18,7 @@ from src.ecs.systems.s_bullet_screen import system_bullet_screen
 from src.ecs.systems.s_collision_player_enemy import system_collision_player_enemy
 from src.ecs.systems.s_enemy_dead import system_enemy_dead
 from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
+from src.ecs.systems.s_explosion import system_explosion
 from src.ecs.systems.s_hunter_state import system_hunter_state
 from src.ecs.systems.s_movement import system_movement
 from src.ecs.systems.s_player_input import system_player_input
@@ -46,6 +48,7 @@ class GameEngine:
                                                     level_path='assets/cfg/level_01.json')
             self.player_cfg = player_loader_from_file(players_path='assets/cfg/player.json',
                                                       level_path='assets/cfg/level_01.json')
+            self.explosion_cfg = explosion_loader_from_file(explosion_path='assets/cfg/explosion.json')
 
     def run(self) -> None:
         self._create()
@@ -88,14 +91,15 @@ class GameEngine:
         system_screen_bounce(self.ecs_world, self.screen)
         system_players_screen_bounce(self.ecs_world, self.screen)
         system_bullet_screen(self.ecs_world, self.screen)
-        system_collision_player_enemy(self.ecs_world, self.players_entity, (self.level_width, self.level_height))
         system_enemy_spawner(self.ecs_world, self.enemies, self.process_time)
-        system_enemy_dead(self.ecs_world)
+        system_collision_player_enemy(self.ecs_world, self.players_entity, (self.level_width, self.level_height),
+                                      self.explosion_cfg)
+        system_enemy_dead(self.ecs_world, self.explosion_cfg)
         system_animation(self.ecs_world, self.delta_time)
         system_player_state(self.ecs_world)
         system_hunter_state(self.ecs_world, self.players_entity)
+        system_explosion(self.ecs_world)
         self.ecs_world._clear_dead_entities()
-
 
     def _draw(self):
         self.screen.fill(
