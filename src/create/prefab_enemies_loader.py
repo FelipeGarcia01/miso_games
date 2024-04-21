@@ -36,6 +36,10 @@ def create_enemies_by_level(enemies_config: list, enemies_types: list) -> list:
                 image=pygame.image.load(enemy.get('image')).convert_alpha(),
                 velocity=pygame.Vector2(velocity, velocity),
                 appear_at=enemy_config.get('appear_at'),
+                velocity_chase=enemy.get('velocity_chase', 0),
+                velocity_return=enemy.get('velocity_return', 0),
+                distance_start_chase=enemy.get('distance_start_chase', 0),
+                distance_start_return=enemy.get('distance_start_return', 0),
                 animations=enemy.get('animations'),
                 spawned=False
             )

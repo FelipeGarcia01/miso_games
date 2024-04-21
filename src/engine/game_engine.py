@@ -17,6 +17,7 @@ from src.ecs.systems.s_bullet_screen import system_bullet_screen
 from src.ecs.systems.s_collision_player_enemy import system_collision_player_enemy
 from src.ecs.systems.s_enemy_dead import system_enemy_dead
 from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
+from src.ecs.systems.s_hunter_state import system_hunter_state
 from src.ecs.systems.s_movement import system_movement
 from src.ecs.systems.s_player_input import system_player_input
 from src.ecs.systems.s_player_state import system_player_state
@@ -85,6 +86,7 @@ class GameEngine:
         system_enemy_spawner(self.ecs_world, self.enemies, self.process_time)
         system_movement(self.ecs_world, self.delta_time)
         system_player_state(self.ecs_world)
+        system_hunter_state(self.ecs_world, self.players_entity)
         system_screen_bounce(self.ecs_world, self.screen)
         system_players_screen_bounce(self.ecs_world, self.screen)
         system_bullet_screen(self.ecs_world, self.screen)
