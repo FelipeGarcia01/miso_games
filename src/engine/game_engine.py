@@ -60,8 +60,9 @@ class GameEngine:
     def _create(self):
         self.players_entity = create_world_entity(
             world=self.ecs_world, component_type="PLAYER",
-            size=self.player_cfg['size'], image=self.player_cfg.get('image'),
-            position=self.player_cfg['position'], velocity=self.player_cfg['velocity'],
+            image=self.player_cfg.get('image'),
+            position=self.player_cfg['position'],
+            velocity=self.player_cfg['velocity'],
             animations=self.player_cfg['animations'])
         create_world_entity(world=self.ecs_world, component_type="INPUT_COMMAND", name="PLAYER_LEFT", key=pygame.K_LEFT)
         create_world_entity(world=self.ecs_world, component_type="INPUT_COMMAND", name="PLAYER_RIGHT",

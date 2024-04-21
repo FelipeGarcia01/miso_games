@@ -5,9 +5,12 @@ import pygame
 
 
 def build_enemy_data(enemy, enemy_type):
+    image = pygame.image.load(enemy.get('image')).convert_alpha()
+    image_size = image.get_size()
     return dict(
         type=enemy_type,
-        image=enemy.get('image'),
+        image=image,
+        image_size=image_size,
         animations=enemy.get('animations', {}),
         velocity_chase=enemy.get('velocity_chase', 0),
         velocity_return=enemy.get('velocity_return', 0),
@@ -33,13 +36,14 @@ def create_enemies_by_level(enemies_config: list, enemies_types: list) -> list:
             dict(
                 type=enemy.get('type'),
                 position=enemy_config.get('position'),
-                image=pygame.image.load(enemy.get('image')).convert_alpha(),
+                image=enemy.get('image'),
+                image_size=enemy.get('image_size'),
                 velocity=pygame.Vector2(velocity, velocity),
                 appear_at=enemy_config.get('appear_at'),
-                velocity_chase=enemy.get('velocity_chase', 0),
-                velocity_return=enemy.get('velocity_return', 0),
-                distance_start_chase=enemy.get('distance_start_chase', 0),
-                distance_start_return=enemy.get('distance_start_return', 0),
+                velocity_chase=enemy.get('velocity_chase'),
+                velocity_return=enemy.get('velocity_return'),
+                distance_start_chase=enemy.get('distance_start_chase'),
+                distance_start_return=enemy.get('distance_start_return'),
                 animations=enemy.get('animations'),
                 spawned=False
             )
