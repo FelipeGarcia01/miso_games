@@ -1,20 +1,23 @@
 import esper
-from src.ecs.components.c_enemy_spawner import CEnemySpawner
-from src.ecs.components.c_player_spawner import CPlayerSpawner
+from src.create.prefab_entities import create_world_entity
+from src.ecs.components.c_surface import CSurface
+from src.ecs.components.c_transform import CTransform
+from src.ecs.components.tags.c_enemy_tag import CEnemyTag
 
 
-def system_collision_player_enemy(world:esper.World, screen_config: tuple):
-    player_spawner = world.get_component(CPlayerSpawner)
-    player = player_spawner[0][1].players[0]
-    player_rect = player.get('surface').get_rect(topleft=player.get('position'))
+def system_collision_player_enemy(world: esper.World, player: int, screen_config: tuple, explosion: dict):
+    components = world.get_components(CSurface, CTransform, CEnemyTag)
+    player_position = world.component_for_entity(player, CTransform)
+    player_surface = world.component_for_entity(player, CSurface)
+    player_rect = CSurface.get_area_relative(player_surface.area, player_position.pos)
 
-    components = world.get_components(CEnemySpawner)
-    c_e_s: CEnemySpawner
+    c_s: CSurface
+    c_t: CTransform
 
-    for enemy_entity, (c_e_s, ) in components:
-        for enemy in c_e_s.enemies:
-            enemy_rect = enemy.get('surface').get_rect(topleft=enemy.get('position'))
-            if enemy_rect.colliderect(player_rect):
-                c_e_s.enemies.remove(enemy)
-                player['position'].x = screen_config[0] - player['surface'].get_width() / 2
-                player['position'].y = screen_config[1] - player['surface'].get_height() / 2
+    for enemy_entity, (c_s, c_t, _) in components:
+        enemy_rect = CSurface.get_area_relative(c_s.area, c_t.pos)
+        if enemy_rect.colliderect(player_rect):
+            world.delete_entity(enemy_entity)
+            player_position.pos.x = screen_config[0] - player_surface.surf.get_width() / 2
+            player_position.pos.y = screen_config[1] - player_surface.surf.get_height() / 2
+            create_world_entity(world, "EXPLOSION", position=c_t.pos, image=explosion.get('image') ,animations=explosion.get('animations'))

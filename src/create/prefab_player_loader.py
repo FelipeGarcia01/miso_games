@@ -5,40 +5,39 @@ import pygame
 
 
 def build_player_data(player):
-    player_on_x = player['size']['x']
-    player_on_y = player['size']['y']
-    player_size = pygame.Vector2(player_on_x, player_on_y)
-    player_color = pygame.Color((player['color']['r'], player['color']['g'], player['color']['b']))
+    image = pygame.image.load(player.get('image')).convert_alpha()
+    size = image.get_size()
+    size_x = size[0] / player.get('animations').get('number_frames')
     return dict(
-        size=player_size,
-        color=player_color,
-        velocity=player['input_velocity'])
+        size=pygame.Vector2(size_x, size[1]),
+        image=image,
+        animations=player.get('animations'),
+        velocity=player.get('input_velocity')
+    )
 
 
-def build_player_start_data(config, level):
-    player_start_position = pygame.Vector2(level["position"]["x"] - config['size']['x'] / 2,
-                                           level["position"]["y"] - config['size']['y'] / 2)
+def build_player_start_data(level, size):
+    player_start_position = pygame.Vector2(
+        level.get("position").get("x") - size.x / 2,
+        level.get("position").get("y") - size.y / 2)
     return dict(position=player_start_position)
 
 
-def create_player_by_level(player_start_data: dict, player_data: dict) -> list:
-    surf = pygame.Surface(player_data.get('size'))
-    surf.fill(player_data.get('color'))
-    return [dict(
+def create_player_by_level(player_start_data: dict, player_data: dict) -> dict:
+    return dict(
+        animations=player_data.get('animations'),
         position=player_start_data.get('position'),
-        surface=surf,
-        size=player_data.get('size'),
-        color=player_data.get('color'),
+        image=player_data.get('image'),
         velocity=pygame.Vector2(0, 0),
         max_velocity=player_data.get('velocity')
-    )]
+    )
 
 
-def player_loader_from_file(players_path, level_path) -> list:
+def player_loader_from_file(players_path, level_path) -> dict:
     with open(players_path, 'r') as players_loaded, open(level_path, 'r') as level_loaded:
         json_level = json.load(level_loaded)
         json_player = json.load(players_loaded)
         player_data = build_player_data(json_player)
-        player_start_data = build_player_start_data(json_player, json_level["player_spawn"])
+        player_start_data = build_player_start_data(json_level.get("player_spawn"), player_data.get('size'))
 
     return create_player_by_level(player_start_data, player_data)
