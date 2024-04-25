@@ -3,9 +3,11 @@ import random
 
 import pygame
 
+from src.engine.service_locator import ServiceLocator
+
 
 def build_player_data(player):
-    image = pygame.image.load(player.get('image')).convert_alpha()
+    image = ServiceLocator.images_services.get(player.get('image'))
     size = image.get_size()
     size_x = size[0] / player.get('animations').get('number_frames')
     return dict(

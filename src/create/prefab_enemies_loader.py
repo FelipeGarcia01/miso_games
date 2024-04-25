@@ -3,9 +3,11 @@ import random
 
 import pygame
 
+from src.engine.service_locator import ServiceLocator
+
 
 def build_enemy_data(enemy, enemy_type):
-    image = pygame.image.load(enemy.get('image')).convert_alpha()
+    image = ServiceLocator.images_services.get(enemy.get('image'))
     image_size = image.get_size()
     return dict(
         type=enemy_type,

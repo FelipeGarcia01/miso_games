@@ -3,9 +3,11 @@ import random
 
 import pygame
 
+from src.engine.service_locator import ServiceLocator
+
 
 def build_bullet_data(bullet, level, mouse_pos, player_pos, player_size):
-    image_surface = pygame.image.load(bullet.get('image')).convert_alpha()
+    image_surface = ServiceLocator.images_services.get(bullet.get('image'))
     bullet_size = image_surface.get_rect().size
     pos_on_x = player_pos.x + (player_size[0] / 2) - (bullet_size[0] / 2)
     pos_on_y = player_pos.y + (player_size[1] / 2) - (bullet_size[1] / 2)

@@ -3,9 +3,11 @@ import random
 
 import pygame
 
+from src.engine.service_locator import ServiceLocator
+
 
 def build_explosion_data(explosion):
-    image_surface = pygame.image.load(explosion.get('image')).convert_alpha()
+    image_surface = ServiceLocator.images_services.get(explosion.get('image'))
     return dict(
         image=image_surface,
         animations=explosion.get('animations')
