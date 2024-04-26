@@ -27,4 +27,5 @@ def system_enemy_spawner(world: esper.World, enemies: list, process_time: float)
                                 velocity=enemy_to_spawn.get('velocity'),
                                 image=enemy_to_spawn.get('image'),
                                 animations=enemy_to_spawn.get('animations'),
+                                sound_chase=enemy_to_spawn.get('sound_chase')
                                 )

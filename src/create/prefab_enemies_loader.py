@@ -21,7 +21,7 @@ def build_enemy_data(enemy, enemy_type):
         min_velocity=enemy.get('velocity_min', 0),
         max_velocity=enemy.get('velocity_max', 0),
         sound=enemy.get('sound', None),
-        chase_sound=enemy.get('chase_sound', None),
+        sound_chase=enemy.get('sound_chase', None),
     )
 
 
@@ -52,7 +52,7 @@ def create_enemies_by_level(enemies_config: list, enemies_types: list) -> list:
                 distance_start_return=enemy.get('distance_start_return'),
                 animations=enemy.get('animations'),
                 sound=enemy.get('sound'),
-                chase_sound=enemy.get('chase_sound'),
+                sound_chase=enemy.get('sound_chase'),
                 spawned=False
             )
         )

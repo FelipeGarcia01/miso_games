@@ -19,6 +19,7 @@ def _do_idle_state(
     c_h_v.vel = pygame.Vector2(0, 0)
     threshold = c_h_s.hunter_enemy.get("distance_start_chase")
     if c_h_t.pos.distance_to(player_t.pos) <= threshold:
+        ServiceLocator.sounds_services.play(c_h_s.chase_sound)
         c_h_s.state = HunterState.CHASE
 
 
