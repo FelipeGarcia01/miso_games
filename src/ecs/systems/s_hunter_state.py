@@ -5,6 +5,7 @@ from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.c_animation import CAnimation, set_animation
 from src.ecs.components.c_hunter_state import CHunterState, HunterState
+from src.engine.service_locator import ServiceLocator
 
 
 def _do_idle_state(

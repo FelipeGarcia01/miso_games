@@ -19,7 +19,9 @@ def build_bullet_data(bullet, level, mouse_pos, player_pos, player_size):
         position=pygame.Vector2(pos_on_x, pos_on_y),
         image=image_surface,
         velocity=velocity,
-        max_bullets=level.get("player_spawn").get("max_bullets"))
+        max_bullets=level.get("player_spawn").get("max_bullets"),
+        sound=bullet.get('sound')
+    )
 
 
 def bullet_loader_from_file(bullet_path, level_path, mouse_pos, player_pos, player_size) -> dict:

@@ -10,7 +10,8 @@ def build_explosion_data(explosion):
     image_surface = ServiceLocator.images_services.get(explosion.get('image'))
     return dict(
         image=image_surface,
-        animations=explosion.get('animations')
+        animations=explosion.get('animations'),
+        sound=explosion.get('sound')
     )
 
 

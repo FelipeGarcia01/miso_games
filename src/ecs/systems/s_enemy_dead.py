@@ -23,4 +23,4 @@ def system_enemy_dead(world: esper.World, explosion: dict):
                 world.delete_entity(enemy_entity)
                 world.delete_entity(entity_b)
                 create_world_entity(world, "EXPLOSION", position=c_e_t.pos, image=explosion.get('image'),
-                                    animations=explosion.get('animations'))
+                                    animations=explosion.get('animations'), sound=explosion.get('sound'))

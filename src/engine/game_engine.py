@@ -150,4 +150,6 @@ class GameEngine:
                                     component_type="BULLET",
                                     image=bullet.get('image'),
                                     position=bullet.get('position'),
-                                    velocity=bullet.get('velocity'))
+                                    velocity=bullet.get('velocity'),
+                                    sound=bullet.get('sound')
+                                    )

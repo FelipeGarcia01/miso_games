@@ -14,6 +14,7 @@ from src.ecs.components.tags.c_bullet_tag import CBulletTag
 from src.ecs.components.tags.c_enemy_tag import CEnemyTag, EnemyType
 from src.ecs.components.tags.c_explosion_tag import CExplosionTag
 from src.ecs.components.tags.c_player_tag import CPlayerTag
+from src.engine.service_locator import ServiceLocator
 
 
 def create_world_entity(world: esper.World, component_type: str, **kargs) -> int:
@@ -47,10 +48,13 @@ def create_world_entity(world: esper.World, component_type: str, **kargs) -> int
     if component_type.__eq__("EXPLOSION"):
         world.add_component(cuad_entity, img_surf)
         world.add_component(cuad_entity, CTransform(kargs.get('position')))
-        world.add_component(cuad_entity, CVelocity(pygame.Vector2(0,0)))
+        world.add_component(cuad_entity, CVelocity(pygame.Vector2(0, 0)))
         world.add_component(cuad_entity, CAnimation(kargs.get('animations')))
         world.add_component(cuad_entity, CExplosionTag())
     if component_type.__eq__("INPUT_COMMAND"):
         world.add_component(cuad_entity, CInputCommand(name=kargs.get('name'), key=kargs.get('key')))
+
+    if kargs.get('sound'):
+        ServiceLocator.sounds_services.play(kargs.get('sound'))
 
     return cuad_entity

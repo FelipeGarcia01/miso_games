@@ -17,7 +17,8 @@ def system_enemy_spawner(world: esper.World, enemies: list, process_time: float)
                                 component_type="ASTEROID",
                                 position=enemy_to_spawn.get('position'),
                                 velocity=enemy_to_spawn.get('velocity'),
-                                image=enemy_to_spawn.get('image'))
+                                image=enemy_to_spawn.get('image'),
+                                sound=enemy_to_spawn.get('sound'))
         else:
             create_world_entity(world=world,
                                 component_type="HUNTER",
@@ -25,5 +26,5 @@ def system_enemy_spawner(world: esper.World, enemies: list, process_time: float)
                                 position=enemy_to_spawn.get('position'),
                                 velocity=enemy_to_spawn.get('velocity'),
                                 image=enemy_to_spawn.get('image'),
-                                animations=enemy_to_spawn.get('animations')
+                                animations=enemy_to_spawn.get('animations'),
                                 )
