@@ -63,6 +63,12 @@ class GameEngine:
         self._clean()
 
     def _create(self):
+        create_world_entity(world=self.ecs_world, component_type="FONTS",
+                            text="MISO video games introduction 2024",
+                            font_family='chalkduster',
+                            font_size=10,
+                            font_color=pygame.Color(255, 255, 255),
+                            position=pygame.Vector2(10, 8))
         self.players_entity = create_world_entity(
             world=self.ecs_world, component_type="PLAYER",
             image=self.player_cfg.get('image'),
