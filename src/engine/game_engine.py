@@ -132,13 +132,11 @@ class GameEngine:
             if c_input.phase == CommandPhase.START:
                 self.on_pause = not self.on_pause
                 if self.pause_entity == -1:
-                    self.pause_entity = create_world_entity(world=self.ecs_world, component_type="FONTS",
-                                                            text="GAME PAUSED",
-                                                            font_color=pygame.Color(255, 0, 0),
-                                                            font_size=40,
-                                                            dimensions=pygame.Vector2(self.window_width,
-                                                                                      self.window_height),
-                                                            fixed='MIDDLE')
+                    self.pause_entity = create_world_entity(
+                        world=self.ecs_world, component_type="FONTS",
+                        text="GAME PAUSED", font_color=pygame.Color(255, 0, 0),
+                        font_size=40, dimensions=pygame.Vector2(self.window_width, self.window_height),
+                        fixed='MIDDLE')
                 else:
                     self.ecs_world.delete_entity(self.pause_entity)
                     self.pause_entity = -1

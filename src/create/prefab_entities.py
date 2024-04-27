@@ -21,9 +21,10 @@ def create_world_entity(world: esper.World, component_type: str, **kargs) -> int
     cuad_entity = world.create_entity()
     img_surf: pygame.Surface = CSurface.from_surface(kargs.get('image')) if kargs.get('image') else None
     if component_type.__eq__("FONTS"):
-        font_surf: CSurface = CSurface.from_text(text=kargs.get('text', ''), font=kargs.get('font_family', None),
-                                                 font_color=kargs.get('font_color', None),
-                                                 font_size=int(kargs.get('font_size', 12)))
+        font_surf: CSurface = CSurface.from_text(
+            text=kargs.get('text', ''), font=kargs.get('font_family', None),
+            font_color=kargs.get('font_color', None),
+            font_size=int(kargs.get('font_size', 12)))
         position: pygame.Vector2 = fixed_pos(kargs.get('dimensions', pygame.Vector2(0, 0)),
                                              kargs.get('fixed', 'TOP_LEFT'), font_surf)
         world.add_component(cuad_entity, font_surf)
@@ -80,7 +81,8 @@ def fixed_pos(screen: pygame.Vector2, fixed: str, surf: CSurface) -> pygame.Vect
         return pygame.Vector2(x, y)
     if 'BOTTOM_MIDDLE'.__eq__(fixed):
         x = (screen.x - surf.area.width) / 2
-        return pygame.Vector2(x, 5)
+        y = screen.y - surf.area.height
+        return pygame.Vector2(x, y)
     if 'BOTTOM_LEFT'.__eq__(fixed):
         y = screen.y - surf.area.height
         return pygame.Vector2(5, y)
