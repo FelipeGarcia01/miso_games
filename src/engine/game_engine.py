@@ -66,27 +66,46 @@ class GameEngine:
         self._clean()
 
     def _create(self):
-        create_world_entity(world=self.ecs_world, component_type="FONTS",
-                            text="MISO video games introduction 2024",
-                            font_family='chalkduster',
-                            font_size=10,
-                            font_color=pygame.Color(255, 255, 255),
-                            dimensions=pygame.Vector2(self.window_width, self.window_height),
-                            fixed='TOP_LEFT')
+        create_world_entity(
+            world=self.ecs_world, component_type="FONTS",
+            text="MISO video games introduction 2024",
+            font_family='chalkduster',
+            font_size=10,
+            font_color=pygame.Color(255, 255, 255),
+            dimensions=pygame.Vector2(self.window_width, self.window_height),
+            fixed='TOP_LEFT'
+        )
         self.players_entity = create_world_entity(
             world=self.ecs_world, component_type="PLAYER",
             image=self.player_cfg.get('image'),
             position=self.player_cfg['position'],
             velocity=self.player_cfg['velocity'],
-            animations=self.player_cfg['animations'])
-        create_world_entity(world=self.ecs_world, component_type="INPUT_COMMAND", name="GAME_PAUSE", key=pygame.K_p)
-        create_world_entity(world=self.ecs_world, component_type="INPUT_COMMAND", name="PLAYER_LEFT", key=pygame.K_LEFT)
-        create_world_entity(world=self.ecs_world, component_type="INPUT_COMMAND", name="PLAYER_RIGHT",
-                            key=pygame.K_RIGHT)
-        create_world_entity(world=self.ecs_world, component_type="INPUT_COMMAND", name="PLAYER_UP", key=pygame.K_UP)
-        create_world_entity(world=self.ecs_world, component_type="INPUT_COMMAND", name="PLAYER_DOWN", key=pygame.K_DOWN)
-        create_world_entity(world=self.ecs_world, component_type="INPUT_COMMAND", name="PLAYER_FIRE",
-                            key=pygame.BUTTON_LEFT)
+            animations=self.player_cfg['animations']
+        )
+        create_world_entity(
+            world=self.ecs_world, component_type="INPUT_COMMAND",
+            name="GAME_PAUSE", keys=[pygame.K_p]
+        )
+        create_world_entity(
+            world=self.ecs_world, component_type="INPUT_COMMAND",
+            name="PLAYER_LEFT", keys=[pygame.K_LEFT, pygame.K_a]
+        )
+        create_world_entity(
+            world=self.ecs_world, component_type="INPUT_COMMAND",
+            name="PLAYER_RIGHT", keys=[pygame.K_RIGHT, pygame.K_d]
+        )
+        create_world_entity(
+            world=self.ecs_world, component_type="INPUT_COMMAND",
+            name="PLAYER_UP", keys=[pygame.K_UP, pygame.K_w]
+        )
+        create_world_entity(
+            world=self.ecs_world, component_type="INPUT_COMMAND",
+            name="PLAYER_DOWN", keys=[pygame.K_DOWN, pygame.K_s]
+        )
+        create_world_entity(
+            world=self.ecs_world, component_type="INPUT_COMMAND",
+            name="PLAYER_FIRE", keys=[pygame.BUTTON_LEFT]
+        )
 
     def _calculate_time(self):
         self.clock.tick(self.framerate)

@@ -61,7 +61,8 @@ def create_world_entity(world: esper.World, component_type: str, **kargs) -> int
         world.add_component(cuad_entity, CAnimation(kargs.get('animations')))
         world.add_component(cuad_entity, CExplosionTag())
     if component_type.__eq__("INPUT_COMMAND"):
-        world.add_component(cuad_entity, CInputCommand(name=kargs.get('name'), key=kargs.get('key')))
+        for key in kargs.get('keys', []):
+            world.add_component(cuad_entity, CInputCommand(name=kargs.get('name'), key=key))
 
     if kargs.get('sound'):
         ServiceLocator.sounds_services.play(kargs.get('sound'))
