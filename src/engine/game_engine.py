@@ -32,6 +32,7 @@ class GameEngine:
         pygame.init()
         self.clock = pygame.time.Clock()
         self.is_running = False
+        self.on_pause = True
         self.delta_time = 0
         self.process_time = 0
         self.ecs_world = esper.World()
@@ -53,6 +54,7 @@ class GameEngine:
     def run(self) -> None:
         self._create()
         self.is_running = True
+        self.on_pause = False
         while self.is_running:
             self._calculate_time()
             self._process_events()
@@ -67,6 +69,7 @@ class GameEngine:
             position=self.player_cfg['position'],
             velocity=self.player_cfg['velocity'],
             animations=self.player_cfg['animations'])
+        create_world_entity(world=self.ecs_world, component_type="INPUT_COMMAND", name="GAME_PAUSE", key=pygame.K_p)
         create_world_entity(world=self.ecs_world, component_type="INPUT_COMMAND", name="PLAYER_LEFT", key=pygame.K_LEFT)
         create_world_entity(world=self.ecs_world, component_type="INPUT_COMMAND", name="PLAYER_RIGHT",
                             key=pygame.K_RIGHT)
@@ -87,19 +90,20 @@ class GameEngine:
                 self.is_running = False
 
     def _update(self):
-        system_movement(self.ecs_world, self.delta_time)
-        system_screen_bounce(self.ecs_world, self.screen)
-        system_players_screen_bounce(self.ecs_world, self.screen)
-        system_bullet_screen(self.ecs_world, self.screen)
-        system_enemy_spawner(self.ecs_world, self.enemies, self.process_time)
-        system_collision_player_enemy(self.ecs_world, self.players_entity, (self.level_width, self.level_height),
-                                      self.explosion_cfg)
-        system_enemy_dead(self.ecs_world, self.explosion_cfg)
-        system_animation(self.ecs_world, self.delta_time)
-        system_player_state(self.ecs_world)
-        system_hunter_state(self.ecs_world, self.players_entity)
-        system_explosion(self.ecs_world)
-        self.ecs_world._clear_dead_entities()
+        if not self.on_pause:
+            system_movement(self.ecs_world, self.delta_time)
+            system_screen_bounce(self.ecs_world, self.screen)
+            system_players_screen_bounce(self.ecs_world, self.screen)
+            system_bullet_screen(self.ecs_world, self.screen)
+            system_enemy_spawner(self.ecs_world, self.enemies, self.process_time)
+            system_collision_player_enemy(self.ecs_world, self.players_entity, (self.level_width, self.level_height),
+                                          self.explosion_cfg)
+            system_enemy_dead(self.ecs_world, self.explosion_cfg)
+            system_animation(self.ecs_world, self.delta_time)
+            system_player_state(self.ecs_world)
+            system_hunter_state(self.ecs_world, self.players_entity)
+            system_explosion(self.ecs_world)
+            self.ecs_world._clear_dead_entities()
 
     def _draw(self):
         self.screen.fill(
@@ -114,6 +118,9 @@ class GameEngine:
     def _do_action(self, c_input: CInputCommand):
         player_velocity_component = self.ecs_world.component_for_entity(self.players_entity, CVelocity)
         velocity = player_velocity_component.vel
+        if c_input.name == "GAME_PAUSE":
+            if c_input.phase == CommandPhase.START:
+                self.on_pause = not self.on_pause
         if c_input.name == "PLAYER_LEFT":
             if c_input.phase == CommandPhase.START:
                 velocity.x -= self.player_cfg.get('max_velocity', 0)
