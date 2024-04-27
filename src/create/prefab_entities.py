@@ -20,7 +20,12 @@ from src.engine.service_locator import ServiceLocator
 def create_world_entity(world: esper.World, component_type: str, **kargs) -> int:
     cuad_entity = world.create_entity()
     img_surf: pygame.Surface = CSurface.from_surface(kargs.get('image')) if kargs.get('image') else None
-
+    if component_type.__eq__("FONTS"):
+        font_surf: pygame.Surface = CSurface.from_text(text=kargs.get('text', ''), font=kargs.get('font_family', None),
+                                                       font_color=kargs.get('font_color', None),
+                                                       font_size=int(kargs.get('font_size', 12)))
+        world.add_component(cuad_entity, font_surf)
+        world.add_component(cuad_entity, CTransform(kargs.get('position')))
     if component_type.__eq__("ASTEROID"):
         world.add_component(cuad_entity, img_surf)
         world.add_component(cuad_entity, CTransform(kargs.get('position')))
