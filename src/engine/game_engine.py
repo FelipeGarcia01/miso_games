@@ -103,31 +103,47 @@ class GameEngine:
         )
         create_world_entity(
             world=self.ecs_world, component_type="INPUT_COMMAND",
-            name="GAME_PAUSE", keys=[pygame.K_p]
+            name="GAME_PAUSE", key=pygame.K_p
         )
         create_world_entity(
             world=self.ecs_world, component_type="INPUT_COMMAND",
-            name="PLAYER_LEFT", keys=[pygame.K_LEFT, pygame.K_a]
+            name="PLAYER_LEFT_LETTER", key=pygame.K_a
         )
         create_world_entity(
             world=self.ecs_world, component_type="INPUT_COMMAND",
-            name="PLAYER_RIGHT", keys=[pygame.K_RIGHT, pygame.K_d]
+            name="PLAYER_LEFT", key=pygame.K_LEFT
         )
         create_world_entity(
             world=self.ecs_world, component_type="INPUT_COMMAND",
-            name="PLAYER_UP", keys=[pygame.K_UP, pygame.K_w]
+            name="PLAYER_RIGHT_LETTER", key=pygame.K_d
         )
         create_world_entity(
             world=self.ecs_world, component_type="INPUT_COMMAND",
-            name="PLAYER_DOWN", keys=[pygame.K_DOWN, pygame.K_s]
+            name="PLAYER_RIGHT", key=pygame.K_RIGHT
         )
         create_world_entity(
             world=self.ecs_world, component_type="INPUT_COMMAND",
-            name="PLAYER_FIRE", keys=[pygame.BUTTON_LEFT]
+            name="PLAYER_UP", key=pygame.K_UP
         )
         create_world_entity(
             world=self.ecs_world, component_type="INPUT_COMMAND",
-            name="SPECIAL_POWER", keys=[pygame.BUTTON_RIGHT]
+            name="PLAYER_UP_LETTER", key=pygame.K_w
+        )
+        create_world_entity(
+            world=self.ecs_world, component_type="INPUT_COMMAND",
+            name="PLAYER_DOWN_LETTER", key=pygame.K_s
+        )
+        create_world_entity(
+            world=self.ecs_world, component_type="INPUT_COMMAND",
+            name="PLAYER_DOWN", key=pygame.K_DOWN
+        )
+        create_world_entity(
+            world=self.ecs_world, component_type="INPUT_COMMAND",
+            name="PLAYER_FIRE", key=pygame.BUTTON_LEFT
+        )
+        create_world_entity(
+            world=self.ecs_world, component_type="INPUT_COMMAND",
+            name="SPECIAL_POWER", key=pygame.BUTTON_RIGHT
         )
 
     def _calculate_time(self):
@@ -186,22 +202,22 @@ class GameEngine:
                     self.ecs_world.delete_entity(self.pause_entity)
                     self.pause_entity = -1
         if not self.on_pause:
-            if c_input.name == "PLAYER_LEFT":
+            if c_input.name == "PLAYER_LEFT" or c_input.name == "PLAYER_LEFT_LETTER":
                 if c_input.phase == CommandPhase.START:
                     velocity.x -= self.player_cfg.get('max_velocity', 0)
                 if c_input.phase == CommandPhase.END:
                     velocity.x += self.player_cfg.get('max_velocity', 0)
-            if c_input.name == "PLAYER_RIGHT":
+            if c_input.name == "PLAYER_RIGHT" or c_input.name == "PLAYER_RIGHT_LETTER":
                 if c_input.phase == CommandPhase.START:
                     velocity.x += self.player_cfg.get('max_velocity', 0)
                 if c_input.phase == CommandPhase.END:
                     velocity.x -= self.player_cfg.get('max_velocity', 0)
-            if c_input.name == "PLAYER_UP":
+            if c_input.name == "PLAYER_UP" or c_input.name == "PLAYER_UP_LETTER":
                 if c_input.phase == CommandPhase.START:
                     velocity.y -= self.player_cfg.get('max_velocity', 0)
                 if c_input.phase == CommandPhase.END:
                     velocity.y += self.player_cfg.get('max_velocity', 0)
-            if c_input.name == "PLAYER_DOWN":
+            if c_input.name == "PLAYER_DOWN" or c_input.name == "PLAYER_DOWN_LETTER":
                 if c_input.phase == CommandPhase.START:
                     velocity.y += self.player_cfg.get('max_velocity', 0)
                 if c_input.phase == CommandPhase.END:
