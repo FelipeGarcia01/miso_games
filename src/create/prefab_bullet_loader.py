@@ -7,7 +7,7 @@ from src.engine.service_locator import ServiceLocator
 
 
 def build_bullet_data(bullet, level, mouse_pos, player_pos, player_size, bullet_type: str):
-    image = bullet.get('standard_bullet_image') if 'STANDARD_BULLET'.__eq__(bullet_type) else bullet.get('special_bullet_image')
+    image = bullet.get('image') if 'STANDARD_BULLET'.__eq__(bullet_type) else bullet.get('special_bullet_image')
     image_surface = ServiceLocator.images_services.get(image)
     bullet_size = image_surface.get_rect().size
     pos_on_x = player_pos.x + (player_size[0] / 2) - (bullet_size[0] / 2)

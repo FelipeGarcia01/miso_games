@@ -1,0 +1,46 @@
+{
+  "title": {
+    "font": "assets/fnt/PressStart2P.ttf",
+    "text": "MISO 2024",
+    "color": {
+      "r": 255,
+      "g": 255,
+      "b": 255
+    },
+    "size": 14,
+    "fixed": "TOP_LEFT"
+  },
+  "pause": {
+    "font": "assets/fnt/PressStart2P.ttf",
+    "text": "GAME PAUSED",
+    "color": {
+      "r": 255,
+      "g": 0,
+      "b": 0
+    },
+    "size": 24,
+    "fixed": "MIDDLE"
+  },
+  "energy": {
+    "font": "assets/fnt/PressStart2P.ttf",
+    "text": "special power percentage:",
+    "color": {
+      "r": 192,
+      "g": 57,
+      "b": 43
+    },
+    "size": 8,
+    "fixed": "BOTTOM_LEFT"
+  },
+  "general": {
+    "font": "assets/fnt/PressStart2P.ttf",
+    "text": "Movimiento: teclas ASDW \ndisparo estandard: Click izquiero \ndisparo especial: Click derecho",
+    "color": {
+      "r": 247,
+      "g": 220,
+      "b": 111
+    },
+    "size": 8,
+    "fixed": "TOP_RIGHT"
+  }
+}
