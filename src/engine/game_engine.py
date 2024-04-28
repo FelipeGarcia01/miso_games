@@ -1,4 +1,5 @@
 import json
+import math
 
 import pygame
 
@@ -19,7 +20,8 @@ from src.ecs.systems.s_bullet_screen import system_bullet_screen
 from src.ecs.systems.s_collision_player_enemy import system_collision_player_enemy
 from src.ecs.systems.s_enemy_dead import system_enemy_dead
 from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
-from src.ecs.systems.s_special_power import system_reload_special_power, system_special_power_fire
+from src.ecs.systems.s_special_power import system_reload_special_power, system_fire_special_power, \
+    system_special_power_activate
 from src.ecs.systems.s_explosion import system_explosion
 from src.ecs.systems.s_hunter_state import system_hunter_state
 from src.ecs.systems.s_movement import system_movement
@@ -81,7 +83,7 @@ class GameEngine:
             dimensions=pygame.Vector2(self.window_width, self.window_height),
             fixed='TOP_LEFT'
         )
-        create_world_entity(
+        self.special_power_entity = create_world_entity(
             world=self.ecs_world, component_type="POWER_FONT",
             text='special power percentage:',
             font_family='sfnsmono',
@@ -155,6 +157,7 @@ class GameEngine:
         system_player_state(self.ecs_world)
         system_hunter_state(self.ecs_world, self.players_entity)
         system_explosion(self.ecs_world)
+        system_fire_special_power(self.ecs_world, self.players_entity)
         self.ecs_world._clear_dead_entities()
 
     def _draw(self):
@@ -225,4 +228,4 @@ class GameEngine:
                         sound=bullet.get('sound')
                     )
             if c_input.name == "SPECIAL_POWER":
-                system_special_power_fire(self.ecs_world, self.players_entity)
+                system_special_power_activate(self.ecs_world)
