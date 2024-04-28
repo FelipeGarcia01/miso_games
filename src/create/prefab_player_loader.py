@@ -14,7 +14,8 @@ def build_player_data(player):
         size=pygame.Vector2(size_x, size[1]),
         image=image,
         animations=player.get('animations'),
-        velocity=player.get('input_velocity')
+        velocity=player.get('input_velocity'),
+        sound=player.get('sound')
     )
 
 
@@ -31,7 +32,8 @@ def create_player_by_level(player_start_data: dict, player_data: dict) -> dict:
         position=player_start_data.get('position'),
         image=player_data.get('image'),
         velocity=pygame.Vector2(0, 0),
-        max_velocity=player_data.get('velocity')
+        max_velocity=player_data.get('velocity'),
+        sound=player_data.get('sound')
     )
 
 

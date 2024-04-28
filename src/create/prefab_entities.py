@@ -1,4 +1,3 @@
-from pygame import Surface
 
 import esper
 import pygame

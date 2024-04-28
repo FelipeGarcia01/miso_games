@@ -25,6 +25,7 @@ from src.ecs.systems.s_player_input import system_player_input
 from src.ecs.systems.s_player_state import system_player_state
 from src.ecs.systems.s_rendering import system_rendering
 from src.ecs.systems.s_screen_bounce import system_screen_bounce, system_players_screen_bounce
+from src.engine.service_locator import ServiceLocator
 
 
 class GameEngine:
@@ -80,7 +81,8 @@ class GameEngine:
             image=self.player_cfg.get('image'),
             position=self.player_cfg['position'],
             velocity=self.player_cfg['velocity'],
-            animations=self.player_cfg['animations']
+            animations=self.player_cfg['animations'],
+            sound=self.player_cfg['sound']
         )
         create_world_entity(
             world=self.ecs_world, component_type="INPUT_COMMAND",
