@@ -202,7 +202,7 @@ class GameEngine:
                 self.on_pause = not self.on_pause
                 if self.pause_entity == -1:
                     self.pause_entity = create_world_entity(
-                        world=self.ecs_world, component_type="FONTS",
+                        world=self.ecs_world, component_type="STATIC_FONT",
                         text="GAME PAUSED", font_color=pygame.Color(255, 0, 0),
                         font_size=40, dimensions=pygame.Vector2(self.window_width, self.window_height),
                         fixed='MIDDLE')
