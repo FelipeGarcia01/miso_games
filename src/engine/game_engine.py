@@ -1,5 +1,4 @@
 import json
-import math
 
 import pygame
 
@@ -8,6 +7,7 @@ from src.create.prefab_bullet_loader import bullet_loader_from_file
 from src.create.prefab_enemies_loader import enemies_loader_from_file
 from src.create.prefab_entities import create_world_entity
 from src.create.prefab_explosion import explosion_loader_from_file
+from src.create.prefab_fonts import fonts_loader_from_file
 from src.create.prefab_player_loader import player_loader_from_file
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 from src.ecs.components.c_surface import CSurface
@@ -53,6 +53,7 @@ class GameEngine:
                 pygame.SCALED)
             self.framerate = json_window.get('framerate')
             self.background_color = json_window.get('bg_color')
+            self.fonts_cfg = fonts_loader_from_file('assets/cfg/interface.json')
             self.enemies = enemies_loader_from_file(
                 enemies_path='assets/cfg/enemies.json',
                 level_path='assets/cfg/level_01.json')
