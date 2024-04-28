@@ -9,7 +9,6 @@ from src.create.prefab_enemies_loader import enemies_loader_from_file
 from src.create.prefab_entities import create_world_entity
 from src.create.prefab_explosion import explosion_loader_from_file
 from src.create.prefab_player_loader import player_loader_from_file
-from src.ecs.components.c_especial_power import CEspecialPower
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
@@ -76,12 +75,21 @@ class GameEngine:
     def _create(self):
         create_world_entity(
             world=self.ecs_world, component_type="STATIC_FONT",
-            text="MISO video games introduction 2024",
+            text="MISO 2024",
             font_family='chalkduster',
             font_size=10,
             font_color=pygame.Color(255, 255, 255),
             dimensions=pygame.Vector2(self.window_width, self.window_height),
             fixed='TOP_LEFT'
+        )
+        create_world_entity(
+            world=self.ecs_world, component_type="STATIC_FONT",
+            text="Movimiento: teclas ASDW \ndisparo estandar: Click izquiero \ndisparo especial: Click derecho",
+            font_family='chalkduster',
+            font_size=10,
+            font_color=pygame.Color(247, 220, 111),
+            dimensions=pygame.Vector2(self.window_width, self.window_height),
+            fixed='TOP_RIGHT'
         )
         self.special_power_entity = create_world_entity(
             world=self.ecs_world, component_type="POWER_FONT",
