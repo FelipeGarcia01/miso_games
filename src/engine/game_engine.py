@@ -77,14 +77,14 @@ class GameEngine:
             world=self.ecs_world, component_type="STATIC_FONT",
             text="MISO 2024",
             font_family='chalkduster',
-            font_size=10,
+            font_size=16,
             font_color=pygame.Color(255, 255, 255),
             dimensions=pygame.Vector2(self.window_width, self.window_height),
             fixed='TOP_LEFT'
         )
         create_world_entity(
             world=self.ecs_world, component_type="STATIC_FONT",
-            text="Movimiento: teclas ASDW \ndisparo estandar: Click izquiero \ndisparo especial: Click derecho",
+            text="Movimiento: teclas ASDW \ndisparo estandard: Click izquiero \ndisparo especial: Click derecho",
             font_family='chalkduster',
             font_size=10,
             font_color=pygame.Color(247, 220, 111),
