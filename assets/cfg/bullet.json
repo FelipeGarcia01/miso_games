@@ -1,5 +1,6 @@
 {
     "sound" : "assets/snd/laser.ogg",
-    "image": "assets/img/bullet.png",
+    "standard_bullet_image": "assets/img/bullet.png",
+    "special_bullet_image": "assets/img/bullet_especial.png",
     "velocity": 200
 }

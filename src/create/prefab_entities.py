@@ -1,8 +1,8 @@
-
 import esper
 import pygame
 
 from src.ecs.components.c_animation import CAnimation
+from src.ecs.components.c_especial_power import CEspecialPower
 from src.ecs.components.c_hunter_state import CHunterState
 from src.ecs.components.c_input_command import CInputCommand
 from src.ecs.components.c_player_state import CPlayerState
@@ -12,6 +12,7 @@ from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.tags.c_bullet_tag import CBulletTag
 from src.ecs.components.tags.c_enemy_tag import CEnemyTag, EnemyType
 from src.ecs.components.tags.c_explosion_tag import CExplosionTag
+from src.ecs.components.tags.c_font_tag import FontType, CFontTag
 from src.ecs.components.tags.c_player_tag import CPlayerTag
 from src.engine.service_locator import ServiceLocator
 
@@ -19,15 +20,33 @@ from src.engine.service_locator import ServiceLocator
 def create_world_entity(world: esper.World, component_type: str, **kargs) -> int:
     cuad_entity = world.create_entity()
     img_surf: pygame.Surface = CSurface.from_surface(kargs.get('image')) if kargs.get('image') else None
-    if component_type.__eq__("FONTS"):
-        font_surf: CSurface = CSurface.from_text(
-            text=kargs.get('text', ''), font=kargs.get('font_family', None),
-            font_color=kargs.get('font_color', None),
-            font_size=int(kargs.get('font_size', 12)))
-        position: pygame.Vector2 = fixed_pos(kargs.get('dimensions', pygame.Vector2(0, 0)),
-                                             kargs.get('fixed', 'TOP_LEFT'), font_surf)
+    if component_type.__eq__("STATIC_FONT"):
+        font_surf, position = build_font(
+            kargs.get('text', ''),
+            kargs.get('font_family', ''),
+            kargs.get('font_color', pygame.Color(255, 255, 255)),
+            kargs.get('font_size', 10),
+            kargs.get('dimensions', pygame.Vector2(0, 0)),
+            kargs.get('fixed', 'TOP_LEFT')
+        )
         world.add_component(cuad_entity, font_surf)
         world.add_component(cuad_entity, CTransform(position))
+        world.add_component(cuad_entity, CFontTag(FontType.STATIC))
+    if component_type.__eq__("POWER_FONT"):
+        energy = kargs.get('energy', 0)
+        wording = kargs.get('text', '')
+        font_surf, position = build_font(
+            f"{wording} {energy} %",
+            kargs.get('font_family', ''),
+            kargs.get('font_color', pygame.Color(255, 255, 255)),
+            kargs.get('font_size', 10),
+            kargs.get('dimensions', pygame.Vector2(0, 0)),
+            kargs.get('fixed', 'TOP_LEFT')
+        )
+        world.add_component(cuad_entity, CEspecialPower(energy, wording))
+        world.add_component(cuad_entity, font_surf)
+        world.add_component(cuad_entity, CTransform(position))
+        world.add_component(cuad_entity, CFontTag(FontType.DYNAMIC))
     if component_type.__eq__("ASTEROID"):
         world.add_component(cuad_entity, img_surf)
         world.add_component(cuad_entity, CTransform(kargs.get('position')))
@@ -90,3 +109,15 @@ def fixed_pos(screen: pygame.Vector2, fixed: str, surf: CSurface) -> pygame.Vect
         x = screen.x - surf.area.width
         y = screen.y - surf.area.height
         return pygame.Vector2(x, y)
+
+
+def build_font(text: str, family: str, color: pygame.Color, size: int, dimension: pygame.Vector2, fixed: str) -> tuple:
+    font_surf: CSurface = CSurface.from_text(
+        text=text, font=family,
+        font_color=color,
+        font_size=size)
+    position: pygame.Vector2 = fixed_pos(
+        dimension,
+        fixed, font_surf
+    )
+    return font_surf, position

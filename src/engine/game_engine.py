@@ -8,6 +8,7 @@ from src.create.prefab_enemies_loader import enemies_loader_from_file
 from src.create.prefab_entities import create_world_entity
 from src.create.prefab_explosion import explosion_loader_from_file
 from src.create.prefab_player_loader import player_loader_from_file
+from src.ecs.components.c_especial_power import CEspecialPower
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
@@ -18,6 +19,7 @@ from src.ecs.systems.s_bullet_screen import system_bullet_screen
 from src.ecs.systems.s_collision_player_enemy import system_collision_player_enemy
 from src.ecs.systems.s_enemy_dead import system_enemy_dead
 from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
+from src.ecs.systems.s_special_power import system_reload_special_power, system_special_power_fire
 from src.ecs.systems.s_explosion import system_explosion
 from src.ecs.systems.s_hunter_state import system_hunter_state
 from src.ecs.systems.s_movement import system_movement
@@ -25,7 +27,6 @@ from src.ecs.systems.s_player_input import system_player_input
 from src.ecs.systems.s_player_state import system_player_state
 from src.ecs.systems.s_rendering import system_rendering
 from src.ecs.systems.s_screen_bounce import system_screen_bounce, system_players_screen_bounce
-from src.engine.service_locator import ServiceLocator
 
 
 class GameEngine:
@@ -37,6 +38,7 @@ class GameEngine:
         self.delta_time = 0
         self.process_time = 0
         self.pause_entity = -1
+        self.special_power_percentage = 0
         self.ecs_world = esper.World()
         with open('assets/cfg/window.json', 'r') as window_file, open('assets/cfg/level_01.json', 'r') as level_loaded:
             json_window = json.load(window_file)
@@ -45,14 +47,17 @@ class GameEngine:
             self.window_height = json_window.get('size').get('h')
             self.level_width = level_pos["player_spawn"]["position"]["x"]
             self.level_height = level_pos["player_spawn"]["position"]["y"]
-            self.screen = pygame.display.set_mode((self.window_width, self.window_height),
-                                                  pygame.SCALED)
+            self.screen = pygame.display.set_mode(
+                (self.window_width, self.window_height),
+                pygame.SCALED)
             self.framerate = json_window.get('framerate')
             self.background_color = json_window.get('bg_color')
-            self.enemies = enemies_loader_from_file(enemies_path='assets/cfg/enemies.json',
-                                                    level_path='assets/cfg/level_01.json')
-            self.player_cfg = player_loader_from_file(players_path='assets/cfg/player.json',
-                                                      level_path='assets/cfg/level_01.json')
+            self.enemies = enemies_loader_from_file(
+                enemies_path='assets/cfg/enemies.json',
+                level_path='assets/cfg/level_01.json')
+            self.player_cfg = player_loader_from_file(
+                players_path='assets/cfg/player.json',
+                level_path='assets/cfg/level_01.json')
             self.explosion_cfg = explosion_loader_from_file(explosion_path='assets/cfg/explosion.json')
 
     def run(self) -> None:
@@ -68,13 +73,23 @@ class GameEngine:
 
     def _create(self):
         create_world_entity(
-            world=self.ecs_world, component_type="FONTS",
+            world=self.ecs_world, component_type="STATIC_FONT",
             text="MISO video games introduction 2024",
             font_family='chalkduster',
             font_size=10,
             font_color=pygame.Color(255, 255, 255),
             dimensions=pygame.Vector2(self.window_width, self.window_height),
             fixed='TOP_LEFT'
+        )
+        create_world_entity(
+            world=self.ecs_world, component_type="POWER_FONT",
+            text='special power percentage:',
+            font_family='sfnsmono',
+            font_size=10,
+            font_color=pygame.Color(192, 57, 43),
+            dimensions=pygame.Vector2(self.window_width, self.window_height),
+            fixed='BOTTOM_LEFT',
+            energy=0
         )
         self.players_entity = create_world_entity(
             world=self.ecs_world, component_type="PLAYER",
@@ -108,6 +123,10 @@ class GameEngine:
             world=self.ecs_world, component_type="INPUT_COMMAND",
             name="PLAYER_FIRE", keys=[pygame.BUTTON_LEFT]
         )
+        create_world_entity(
+            world=self.ecs_world, component_type="INPUT_COMMAND",
+            name="SPECIAL_POWER", keys=[pygame.BUTTON_RIGHT]
+        )
 
     def _calculate_time(self):
         self.clock.tick(self.framerate)
@@ -121,14 +140,16 @@ class GameEngine:
                 self.is_running = False
 
     def _update(self):
-
+        system_reload_special_power(self.ecs_world, self.window_width, self.window_height)
         system_movement(self.ecs_world, self.delta_time)
         system_screen_bounce(self.ecs_world, self.screen)
         system_players_screen_bounce(self.ecs_world, self.screen)
         system_bullet_screen(self.ecs_world, self.screen)
         system_enemy_spawner(self.ecs_world, self.enemies, self.process_time)
-        system_collision_player_enemy(self.ecs_world, self.players_entity, (self.level_width, self.level_height),
-                                      self.explosion_cfg)
+        system_collision_player_enemy(
+            self.ecs_world, self.players_entity,
+            (self.level_width, self.level_height),
+            self.explosion_cfg)
         system_enemy_dead(self.ecs_world, self.explosion_cfg)
         system_animation(self.ecs_world, self.delta_time)
         system_player_state(self.ecs_world)
@@ -191,13 +212,17 @@ class GameEngine:
                     level_path='assets/cfg/level_01.json',
                     mouse_pos=pygame.mouse.get_pos(),
                     player_pos=player_pos.pos,
-                    player_size=player_rect
+                    player_size=player_rect,
+                    bullet_type='STANDARD_BULLET'
                 )
                 if len(self.ecs_world.get_component(CBulletTag)) < bullet.get("max_bullets"):
-                    create_world_entity(world=self.ecs_world,
-                                        component_type="BULLET",
-                                        image=bullet.get('image'),
-                                        position=bullet.get('position'),
-                                        velocity=bullet.get('velocity'),
-                                        sound=bullet.get('sound')
-                                        )
+                    create_world_entity(
+                        world=self.ecs_world,
+                        component_type="BULLET",
+                        image=bullet.get('image'),
+                        position=bullet.get('position'),
+                        velocity=bullet.get('velocity'),
+                        sound=bullet.get('sound')
+                    )
+            if c_input.name == "SPECIAL_POWER":
+                system_special_power_fire(self.ecs_world, self.players_entity)
