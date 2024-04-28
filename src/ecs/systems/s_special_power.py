@@ -72,7 +72,7 @@ def system_special_power_activate(world: esper.World):
     c_e_p: CEspecialPower
 
     for entity, (c_e_p,) in components:
-        if c_e_p.percentage > 0:
+        if c_e_p.percentage == 100:
             c_e_p.active = True
 
 
