@@ -10,7 +10,7 @@ from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 
 
-def system_reload_special_power(world: esper.World, window_width: int, window_height: int):
+def system_reload_special_power(world: esper.World, window_width: int, window_height: int, font_cfg: dict):
     components = world.get_components(CEspecialPower)
 
     c_e_p: CEspecialPower
@@ -24,9 +24,8 @@ def system_reload_special_power(world: esper.World, window_width: int, window_he
             create_world_entity(
                 world=world, component_type="POWER_FONT",
                 text=c_e_p.wording,
-                font_family='sfnsmono',
-                font_size=10,
-                font_color=color,
+                font_cfg=font_cfg,
+                color=color,
                 dimensions=pygame.Vector2(window_width, window_height),
                 fixed='BOTTOM_LEFT',
                 energy=current_energy

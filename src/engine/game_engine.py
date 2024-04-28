@@ -76,28 +76,25 @@ class GameEngine:
     def _create(self):
         create_world_entity(
             world=self.ecs_world, component_type="STATIC_FONT",
-            text="MISO 2024",
-            font_family='chalkduster',
-            font_size=16,
-            font_color=pygame.Color(255, 255, 255),
+            text=self.fonts_cfg.get('title').get('text'),
+            font_cfg=self.fonts_cfg.get('title'),
+            color=self.fonts_cfg.get('title').get('color'),
             dimensions=pygame.Vector2(self.window_width, self.window_height),
             fixed='TOP_LEFT'
         )
         create_world_entity(
             world=self.ecs_world, component_type="STATIC_FONT",
-            text="Movimiento: teclas ASDW \ndisparo estandard: Click izquiero \ndisparo especial: Click derecho",
-            font_family='chalkduster',
-            font_size=10,
-            font_color=pygame.Color(247, 220, 111),
+            text=self.fonts_cfg.get('general').get('text'),
+            font_cfg=self.fonts_cfg.get('general'),
+            color=self.fonts_cfg.get('general').get('color'),
             dimensions=pygame.Vector2(self.window_width, self.window_height),
             fixed='TOP_RIGHT'
         )
         self.special_power_entity = create_world_entity(
             world=self.ecs_world, component_type="POWER_FONT",
-            text='special power percentage:',
-            font_family='sfnsmono',
-            font_size=10,
-            font_color=pygame.Color(192, 57, 43),
+            text=self.fonts_cfg.get('energy').get('text'),
+            font_cfg=self.fonts_cfg.get('energy'),
+            color=self.fonts_cfg.get('energy').get('color'),
             dimensions=pygame.Vector2(self.window_width, self.window_height),
             fixed='BOTTOM_LEFT',
             energy=0
@@ -167,7 +164,7 @@ class GameEngine:
                 self.is_running = False
 
     def _update(self):
-        system_reload_special_power(self.ecs_world, self.window_width, self.window_height)
+        system_reload_special_power(self.ecs_world, self.window_width, self.window_height, self.fonts_cfg.get('energy'))
         system_movement(self.ecs_world, self.delta_time)
         system_screen_bounce(self.ecs_world, self.screen)
         system_players_screen_bounce(self.ecs_world, self.screen)
@@ -204,8 +201,10 @@ class GameEngine:
                 if self.pause_entity == -1:
                     self.pause_entity = create_world_entity(
                         world=self.ecs_world, component_type="STATIC_FONT",
-                        text="GAME PAUSED", font_color=pygame.Color(255, 0, 0),
-                        font_size=40, dimensions=pygame.Vector2(self.window_width, self.window_height),
+                        text=self.fonts_cfg.get('pause').get('text'),
+                        font_cfg=self.fonts_cfg.get('pause'),
+                        color=self.fonts_cfg.get('pause').get('color'),
+                        dimensions=pygame.Vector2(self.window_width, self.window_height),
                         fixed='MIDDLE')
                 else:
                     self.ecs_world.delete_entity(self.pause_entity)

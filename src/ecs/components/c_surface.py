@@ -6,19 +6,17 @@ class CSurface:
         self.surf = pygame.Surface(size)
         self.surf.fill(color)
         self.area = self.surf.get_rect()
+        self.fixed = ''
 
     @classmethod
-    def from_text(cls, text: str,
-                  font: str = None,
-                  font_color: pygame.Color = None,
-                  font_size: int = 10):
-        if font_color is None:
-            font_color = pygame.Color(255, 255, 255)
+    def from_text(cls, text: str, font_cfg: dict, color: pygame.Color):
+        size = font_cfg.get("size")
+        font = font_cfg.get('font', pygame.font.SysFont(None, size))
 
-        font_family = pygame.font.SysFont(font, font_size)
         c_surf = cls(pygame.Vector2(1, 1), pygame.Color(0, 0, 0, 0))
-        c_surf.surf = font_family.render(text, True, font_color)
+        c_surf.surf = font.render(text, True, color)
         c_surf.area = c_surf.surf.get_rect()
+        c_surf.fixed = font_cfg.get('fixed')
         return c_surf
 
     @classmethod

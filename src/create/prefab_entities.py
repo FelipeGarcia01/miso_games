@@ -23,11 +23,10 @@ def create_world_entity(world: esper.World, component_type: str, **kargs) -> int
     if component_type.__eq__("STATIC_FONT"):
         font_surf, position = build_font(
             kargs.get('text', ''),
-            kargs.get('font_family', ''),
-            kargs.get('font_color', pygame.Color(255, 255, 255)),
-            kargs.get('font_size', 10),
+            kargs.get('font_cfg'),
             kargs.get('dimensions', pygame.Vector2(0, 0)),
-            kargs.get('fixed', 'TOP_LEFT')
+            kargs.get('fixed', 'TOP_LEFT'),
+            kargs.get('color', pygame.Color(255, 255, 255))
         )
         world.add_component(cuad_entity, font_surf)
         world.add_component(cuad_entity, CTransform(position))
@@ -37,11 +36,10 @@ def create_world_entity(world: esper.World, component_type: str, **kargs) -> int
         wording = kargs.get('text', '')
         font_surf, position = build_font(
             f"{wording} {energy} %",
-            kargs.get('font_family', ''),
-            kargs.get('font_color', pygame.Color(255, 255, 255)),
-            kargs.get('font_size', 10),
+            kargs.get('font_cfg'),
             kargs.get('dimensions', pygame.Vector2(0, 0)),
-            kargs.get('fixed', 'TOP_LEFT')
+            kargs.get('fixed', 'TOP_LEFT'),
+            kargs.get('color', pygame.Color(255, 255, 255))
         )
         world.add_component(cuad_entity, CEspecialPower(energy, wording))
         world.add_component(cuad_entity, font_surf)
@@ -110,11 +108,9 @@ def fixed_pos(screen: pygame.Vector2, fixed: str, surf: CSurface) -> pygame.Vect
         return pygame.Vector2(x, y)
 
 
-def build_font(text: str, family: str, color: pygame.Color, size: int, dimension: pygame.Vector2, fixed: str) -> tuple:
+def build_font(text: str, font_cfg: dict, dimension: pygame.Vector2, fixed: str, color: pygame.Color) -> tuple:
     font_surf: CSurface = CSurface.from_text(
-        text=text, font=family,
-        font_color=color,
-        font_size=size)
+        text=text, font_cfg=font_cfg, color=color)
     position: pygame.Vector2 = fixed_pos(
         dimension,
         fixed, font_surf
