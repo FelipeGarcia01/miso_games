@@ -5,6 +5,7 @@ import pygame
 import esper
 from src.create.cfg_loader_executor import CFGLoaderExecutor
 from src.create.prefab_entities import create_world_entity
+from src.create.world_entities_executor import WorldEntitiesExecutor
 from src.ecs.components.c_especial_power import CEspecialPower
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
@@ -34,6 +35,7 @@ def system_reload_special_power(world: esper.World, window_width: int, window_he
 
 def system_fire_special_power(world: esper.World, player: int, level_path: str):
     strategy_load_cfg = CFGLoaderExecutor()
+    strategy_world_entity = WorldEntitiesExecutor()
     components = world.get_components(CEspecialPower)
     c_e_p: CEspecialPower
     for entity, (c_e_p,) in components:
@@ -52,9 +54,9 @@ def system_fire_special_power(world: esper.World, player: int, level_path: str):
                 player_size=player_rect,
                 bullet_type='SPECIAL_BULLET')
 
-            create_world_entity(
+            strategy_world_entity.world_entity_executor(
                 world=world,
-                component_type="BULLET",
+                entity_type="BULLET_ENTITY",
                 image=bullet.get('image'),
                 position=bullet.get('position'),
                 velocity=bullet.get('velocity'),

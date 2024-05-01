@@ -242,9 +242,9 @@ class GameEngine:
                     bullet_type='STANDARD_BULLET')
 
                 if len(self.ecs_world.get_component(CBulletTag)) < bullet.get("max_bullets"):
-                    create_world_entity(
+                    self.strategy_world_entity.world_entity_executor(
                         world=self.ecs_world,
-                        component_type="BULLET",
+                        entity_type="BULLET_ENTITY",
                         image=bullet.get('image'),
                         position=bullet.get('position'),
                         velocity=bullet.get('velocity'),
