@@ -29,11 +29,13 @@ from src.ecs.systems.s_player_state import system_player_state
 from src.ecs.systems.s_rendering import system_rendering
 from src.ecs.systems.s_screen_bounce import system_screen_bounce, system_players_screen_bounce
 
+LEVEL_PATH = 'assets/cfg/level_01.json'
+
 
 class GameEngine:
     def __init__(self) -> None:
         pygame.init()
-        strategy_load_cfg = CFGLoaderExecutor()
+        self.strategy_load_cfg = CFGLoaderExecutor()
         self.clock = pygame.time.Clock()
         self.is_running = False
         self.on_pause = True
@@ -42,7 +44,7 @@ class GameEngine:
         self.pause_entity = -1
         self.special_power_percentage = 0
         self.ecs_world = esper.World()
-        with open('assets/cfg/window.json', 'r') as window_file, open('assets/cfg/level_01.json', 'r') as level_loaded:
+        with open('assets/cfg/window.json', 'r') as window_file, open(LEVEL_PATH, 'r') as level_loaded:
             json_window = json.load(window_file)
             level_pos = json.load(level_loaded)
             self.window_width = json_window.get('size').get('w')
@@ -57,8 +59,8 @@ class GameEngine:
             self.fonts_cfg = fonts_loader_from_file('assets/cfg/interface.json')
             self.enemies = enemies_loader_from_file(
                 enemies_path='assets/cfg/enemies.json',
-                level_path='assets/cfg/level_01.json')
-            self.player_cfg = strategy_load_cfg.cfg_executor('PLAYER_CFG')
+                level_path=LEVEL_PATH)
+            self.player_cfg = self.strategy_load_cfg.cfg_executor(cfg_type='PLAYER_CFG', level_path=LEVEL_PATH)
             self.explosion_cfg = explosion_loader_from_file(explosion_path='assets/cfg/explosion.json')
 
     def run(self) -> None:
@@ -178,7 +180,7 @@ class GameEngine:
         system_player_state(self.ecs_world)
         system_hunter_state(self.ecs_world, self.players_entity)
         system_explosion(self.ecs_world)
-        system_fire_special_power(self.ecs_world, self.players_entity)
+        system_fire_special_power(self.ecs_world, self.players_entity, LEVEL_PATH)
         self.ecs_world._clear_dead_entities()
 
     def _draw(self):
@@ -233,14 +235,14 @@ class GameEngine:
                 player_pos = self.ecs_world.component_for_entity(self.players_entity, CTransform)
                 player_size = self.ecs_world.component_for_entity(self.players_entity, CSurface)
                 player_rect = player_size.area.size
-                bullet = bullet_loader_from_file(
-                    bullet_path='assets/cfg/bullet.json',
-                    level_path='assets/cfg/level_01.json',
+                bullet = self.strategy_load_cfg.cfg_executor(
+                    cfg_type='BULLET_CFG',
+                    level_path=LEVEL_PATH,
                     mouse_pos=pygame.mouse.get_pos(),
                     player_pos=player_pos.pos,
                     player_size=player_rect,
-                    bullet_type='STANDARD_BULLET'
-                )
+                    bullet_type='STANDARD_BULLET')
+
                 if len(self.ecs_world.get_component(CBulletTag)) < bullet.get("max_bullets"):
                     create_world_entity(
                         world=self.ecs_world,

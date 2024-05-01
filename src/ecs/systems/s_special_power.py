@@ -3,6 +3,7 @@ import math
 import pygame
 
 import esper
+from src.create.cfg_loader_executor import CFGLoaderExecutor
 from src.create.prefab_bullet_loader import bullet_loader_from_file
 from src.create.prefab_entities import create_world_entity
 from src.ecs.components.c_especial_power import CEspecialPower
@@ -32,7 +33,8 @@ def system_reload_special_power(world: esper.World, window_width: int, window_he
             )
 
 
-def system_fire_special_power(world: esper.World, player: int):
+def system_fire_special_power(world: esper.World, player: int, level_path: str):
+    strategy_load_cfg = CFGLoaderExecutor()
     components = world.get_components(CEspecialPower)
     c_e_p: CEspecialPower
     for entity, (c_e_p,) in components:
@@ -42,14 +44,15 @@ def system_fire_special_power(world: esper.World, player: int):
             player_rect = player_size.area.size
             pos_x = player_pos.pos.x + (100 * math.cos(math.radians(c_e_p.angle)))
             pos_y = player_pos.pos.y + (100 * math.sin(math.radians(c_e_p.angle)))
-            bullet = bullet_loader_from_file(
-                bullet_path='assets/cfg/bullet.json',
-                level_path='assets/cfg/level_01.json',
+
+            bullet = strategy_load_cfg.cfg_executor(
+                cfg_type='BULLET_CFG',
+                level_path=level_path,
                 mouse_pos=pygame.Vector2(pos_x, pos_y),
                 player_pos=player_pos.pos,
                 player_size=player_rect,
-                bullet_type='SPECIAL_BULLET'
-            )
+                bullet_type='SPECIAL_BULLET')
+            
             create_world_entity(
                 world=world,
                 component_type="BULLET",

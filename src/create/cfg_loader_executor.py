@@ -18,6 +18,6 @@ class CFGLoaderExecutor:
             'INTERFACE_CFG': CFGLoaderInterface()
         }
 
-    def cfg_executor(self, cfg_type) -> dict:
+    def cfg_executor(self, cfg_type, level_path, **kwargs) -> dict:
         cfg_loader: CFGLoaderStrategy = self.str_dict.get(cfg_type, CFGLoaderNone())
-        return cfg_loader.load_cfg()
+        return cfg_loader.load_cfg(level_path, **kwargs)
