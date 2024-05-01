@@ -58,12 +58,6 @@ def create_world_entity(world: esper.World, component_type: str, **kargs) -> int
         world.add_component(cuad_entity,
                             CHunterState(kargs.get('enemy_data'), kargs.get('position'), kargs.get('sound_chase')))
         world.add_component(cuad_entity, CEnemyTag(EnemyType.HUNTER))
-    if component_type.__eq__("EXPLOSION"):
-        world.add_component(cuad_entity, img_surf)
-        world.add_component(cuad_entity, CTransform(kargs.get('position')))
-        world.add_component(cuad_entity, CVelocity(pygame.Vector2(0, 0)))
-        world.add_component(cuad_entity, CAnimation(kargs.get('animations')))
-        world.add_component(cuad_entity, CExplosionTag())
     if component_type.__eq__("INPUT_COMMAND"):
         world.add_component(cuad_entity, CInputCommand(name=kargs.get('name'), key=kargs.get('key')))
 
