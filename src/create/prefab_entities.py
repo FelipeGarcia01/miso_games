@@ -58,8 +58,6 @@ def create_world_entity(world: esper.World, component_type: str, **kargs) -> int
         world.add_component(cuad_entity,
                             CHunterState(kargs.get('enemy_data'), kargs.get('position'), kargs.get('sound_chase')))
         world.add_component(cuad_entity, CEnemyTag(EnemyType.HUNTER))
-    if component_type.__eq__("INPUT_COMMAND"):
-        world.add_component(cuad_entity, CInputCommand(name=kargs.get('name'), key=kargs.get('key')))
 
     if kargs.get('sound'):
         ServiceLocator.sounds_services.play(kargs.get('sound'))

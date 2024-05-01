@@ -106,48 +106,48 @@ class GameEngine:
             energy=0
         )
 
-        create_world_entity(
-            world=self.ecs_world, component_type="INPUT_COMMAND",
+        self.strategy_world_entity.world_entity_executor(
+            world=self.ecs_world, entity_type="INPUT_ENTITY",
             name="GAME_PAUSE", key=pygame.K_p
         )
-        create_world_entity(
-            world=self.ecs_world, component_type="INPUT_COMMAND",
+        self.strategy_world_entity.world_entity_executor(
+            world=self.ecs_world, entity_type="INPUT_ENTITY",
             name="PLAYER_LEFT_LETTER", key=pygame.K_a
         )
-        create_world_entity(
-            world=self.ecs_world, component_type="INPUT_COMMAND",
+        self.strategy_world_entity.world_entity_executor(
+            world=self.ecs_world, entity_type="INPUT_ENTITY",
             name="PLAYER_LEFT", key=pygame.K_LEFT
         )
-        create_world_entity(
-            world=self.ecs_world, component_type="INPUT_COMMAND",
+        self.strategy_world_entity.world_entity_executor(
+            world=self.ecs_world, entity_type="INPUT_ENTITY",
             name="PLAYER_RIGHT_LETTER", key=pygame.K_d
         )
-        create_world_entity(
-            world=self.ecs_world, component_type="INPUT_COMMAND",
+        self.strategy_world_entity.world_entity_executor(
+            world=self.ecs_world, entity_type="INPUT_ENTITY",
             name="PLAYER_RIGHT", key=pygame.K_RIGHT
         )
-        create_world_entity(
-            world=self.ecs_world, component_type="INPUT_COMMAND",
+        self.strategy_world_entity.world_entity_executor(
+            world=self.ecs_world, entity_type="INPUT_ENTITY",
             name="PLAYER_UP", key=pygame.K_UP
         )
-        create_world_entity(
-            world=self.ecs_world, component_type="INPUT_COMMAND",
+        self.strategy_world_entity.world_entity_executor(
+            world=self.ecs_world, entity_type="INPUT_ENTITY",
             name="PLAYER_UP_LETTER", key=pygame.K_w
         )
-        create_world_entity(
-            world=self.ecs_world, component_type="INPUT_COMMAND",
+        self.strategy_world_entity.world_entity_executor(
+            world=self.ecs_world, entity_type="INPUT_ENTITY",
             name="PLAYER_DOWN_LETTER", key=pygame.K_s
         )
-        create_world_entity(
-            world=self.ecs_world, component_type="INPUT_COMMAND",
+        self.strategy_world_entity.world_entity_executor(
+            world=self.ecs_world, entity_type="INPUT_ENTITY",
             name="PLAYER_DOWN", key=pygame.K_DOWN
         )
-        create_world_entity(
-            world=self.ecs_world, component_type="INPUT_COMMAND",
+        self.strategy_world_entity.world_entity_executor(
+            world=self.ecs_world, entity_type="INPUT_ENTITY",
             name="PLAYER_FIRE", key=pygame.BUTTON_LEFT
         )
-        create_world_entity(
-            world=self.ecs_world, component_type="INPUT_COMMAND",
+        self.strategy_world_entity.world_entity_executor(
+            world=self.ecs_world, entity_type="INPUT_ENTITY",
             name="SPECIAL_POWER", key=pygame.BUTTON_RIGHT
         )
 

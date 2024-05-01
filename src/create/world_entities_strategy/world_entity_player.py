@@ -13,7 +13,7 @@ from src.engine.service_locator import ServiceLocator
 
 class WorldEntityPlayer(WorldEntityStrategy):
 
-    def create_entity(self, world: esper.World, **kwargs) -> dict:
+    def create_entity(self, world: esper.World, **kwargs) -> int:
         cuad_entity = world.create_entity()
         img_surf: pygame.Surface = CSurface.from_surface(kwargs.get('image')) if kwargs.get('image') else None
         world.add_component(cuad_entity, img_surf)
