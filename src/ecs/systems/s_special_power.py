@@ -4,7 +4,6 @@ import pygame
 
 import esper
 from src.create.cfg_loader_executor import CFGLoaderExecutor
-from src.create.prefab_bullet_loader import bullet_loader_from_file
 from src.create.prefab_entities import create_world_entity
 from src.ecs.components.c_especial_power import CEspecialPower
 from src.ecs.components.c_surface import CSurface
@@ -52,7 +51,7 @@ def system_fire_special_power(world: esper.World, player: int, level_path: str):
                 player_pos=player_pos.pos,
                 player_size=player_rect,
                 bullet_type='SPECIAL_BULLET')
-            
+
             create_world_entity(
                 world=world,
                 component_type="BULLET",

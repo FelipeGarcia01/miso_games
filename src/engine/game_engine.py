@@ -4,7 +4,6 @@ import pygame
 
 import esper
 from src.create.cfg_loader_executor import CFGLoaderExecutor
-from src.create.prefab_bullet_loader import bullet_loader_from_file
 from src.create.prefab_enemies_loader import enemies_loader_from_file
 from src.create.prefab_entities import create_world_entity
 from src.create.prefab_explosion import explosion_loader_from_file
