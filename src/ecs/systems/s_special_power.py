@@ -4,7 +4,6 @@ import pygame
 
 import esper
 from src.create.cfg_loader_executor import CFGLoaderExecutor
-from src.create.prefab_entities import create_world_entity
 from src.create.world_entities_executor import WorldEntitiesExecutor
 from src.ecs.components.c_especial_power import CEspecialPower
 from src.ecs.components.c_surface import CSurface
@@ -12,6 +11,7 @@ from src.ecs.components.c_transform import CTransform
 
 
 def system_reload_special_power(world: esper.World, window_width: int, window_height: int, font_cfg: dict):
+    strategy_world_entity = WorldEntitiesExecutor()
     components = world.get_components(CEspecialPower)
 
     c_e_p: CEspecialPower
@@ -22,8 +22,10 @@ def system_reload_special_power(world: esper.World, window_width: int, window_he
             current_energy += 1
             world.delete_entity(entity)
             color = color_by_energy(current_energy)
-            create_world_entity(
-                world=world, component_type="POWER_FONT",
+            strategy_world_entity.world_entity_executor(
+                world=world,
+                entity_type='FONT_ENTITY',
+                font_type="POWER",
                 text=c_e_p.wording,
                 font_cfg=font_cfg,
                 color=color,

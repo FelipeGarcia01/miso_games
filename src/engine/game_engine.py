@@ -4,7 +4,6 @@ import pygame
 
 import esper
 from src.create.cfg_loader_executor import CFGLoaderExecutor
-from src.create.prefab_entities import create_world_entity
 from src.create.world_entities_executor import WorldEntitiesExecutor
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 from src.ecs.components.c_surface import CSurface
@@ -80,24 +79,30 @@ class GameEngine:
             sound=self.player_cfg['sound']
         )
 
-        create_world_entity(
-            world=self.ecs_world, component_type="STATIC_FONT",
+        self.strategy_world_entity.world_entity_executor(
+            world=self.ecs_world,
+            entity_type='FONT_ENTITY',
+            font_type="STATIC",
             text=self.fonts_cfg.get('title').get('text'),
             font_cfg=self.fonts_cfg.get('title'),
             color=self.fonts_cfg.get('title').get('color'),
             dimensions=pygame.Vector2(self.window_width, self.window_height),
             fixed='TOP_LEFT'
         )
-        create_world_entity(
-            world=self.ecs_world, component_type="STATIC_FONT",
+        self.strategy_world_entity.world_entity_executor(
+            world=self.ecs_world,
+            entity_type='FONT_ENTITY',
+            font_type="STATIC",
             text=self.fonts_cfg.get('general').get('text'),
             font_cfg=self.fonts_cfg.get('general'),
             color=self.fonts_cfg.get('general').get('color'),
             dimensions=pygame.Vector2(self.window_width, self.window_height),
             fixed='TOP_RIGHT'
         )
-        self.special_power_entity = create_world_entity(
-            world=self.ecs_world, component_type="POWER_FONT",
+        self.strategy_world_entity.world_entity_executor(
+            world=self.ecs_world,
+            entity_type='FONT_ENTITY',
+            font_type="POWER",
             text=self.fonts_cfg.get('energy').get('text'),
             font_cfg=self.fonts_cfg.get('energy'),
             color=self.fonts_cfg.get('energy').get('color'),
@@ -198,8 +203,10 @@ class GameEngine:
             if c_input.phase == CommandPhase.START:
                 self.on_pause = not self.on_pause
                 if self.pause_entity == -1:
-                    self.pause_entity = create_world_entity(
-                        world=self.ecs_world, component_type="STATIC_FONT",
+                    self.pause_entity = self.strategy_world_entity.world_entity_executor(
+                        world=self.ecs_world,
+                        entity_type='FONT_ENTITY',
+                        font_type="STATIC",
                         text=self.fonts_cfg.get('pause').get('text'),
                         font_cfg=self.fonts_cfg.get('pause'),
                         color=self.fonts_cfg.get('pause').get('color'),

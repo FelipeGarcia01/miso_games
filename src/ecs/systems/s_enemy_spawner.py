@@ -1,5 +1,4 @@
 import esper
-from src.create.prefab_entities import create_world_entity
 from src.create.world_entities_executor import WorldEntitiesExecutor
 
 
