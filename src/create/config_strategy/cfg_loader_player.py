@@ -1,9 +1,13 @@
 import json
-import random
 
 import pygame
 
+from src.create.config_strategy.cfg_loader_strategy import CFGLoaderStrategy
+
 from src.engine.service_locator import ServiceLocator
+
+PLAYER_PATH = 'assets/cfg/player.json'
+LEVEL_PATH = 'assets/cfg/level_01.json'
 
 
 def build_player_data(player):
@@ -37,11 +41,13 @@ def create_player_by_level(player_start_data: dict, player_data: dict) -> dict:
     )
 
 
-def player_loader_from_file(players_path, level_path) -> dict:
-    with open(players_path, 'r') as players_loaded, open(level_path, 'r') as level_loaded:
-        json_level = json.load(level_loaded)
-        json_player = json.load(players_loaded)
-        player_data = build_player_data(json_player)
-        player_start_data = build_player_start_data(json_level.get("player_spawn"), player_data.get('size'))
+class CFGLoaderPlayer(CFGLoaderStrategy):
 
-    return create_player_by_level(player_start_data, player_data)
+    def load_cfg(self) -> dict:
+        with open(PLAYER_PATH, 'r') as players_loaded, open(LEVEL_PATH, 'r') as level_loaded:
+            json_level = json.load(level_loaded)
+            json_player = json.load(players_loaded)
+            player_data = build_player_data(json_player)
+            player_start_data = build_player_start_data(json_level.get("player_spawn"), player_data.get('size'))
+
+        return create_player_by_level(player_start_data, player_data)
