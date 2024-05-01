@@ -45,19 +45,6 @@ def create_world_entity(world: esper.World, component_type: str, **kargs) -> int
         world.add_component(cuad_entity, font_surf)
         world.add_component(cuad_entity, CTransform(position))
         world.add_component(cuad_entity, CFontTag(FontType.DYNAMIC))
-    if component_type.__eq__("ASTEROID"):
-        world.add_component(cuad_entity, img_surf)
-        world.add_component(cuad_entity, CTransform(kargs.get('position')))
-        world.add_component(cuad_entity, CVelocity(kargs.get('velocity')))
-        world.add_component(cuad_entity, CEnemyTag(EnemyType.ASTEROID))
-    if component_type.__eq__("HUNTER"):
-        world.add_component(cuad_entity, img_surf)
-        world.add_component(cuad_entity, CTransform(kargs.get('position')))
-        world.add_component(cuad_entity, CVelocity(kargs.get('velocity')))
-        world.add_component(cuad_entity, CAnimation(kargs.get('animations')))
-        world.add_component(cuad_entity,
-                            CHunterState(kargs.get('enemy_data'), kargs.get('position'), kargs.get('sound_chase')))
-        world.add_component(cuad_entity, CEnemyTag(EnemyType.HUNTER))
 
     if kargs.get('sound'):
         ServiceLocator.sounds_services.play(kargs.get('sound'))
