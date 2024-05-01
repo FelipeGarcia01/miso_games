@@ -5,6 +5,7 @@ import pygame
 import esper
 from src.create.cfg_loader_executor import CFGLoaderExecutor
 from src.create.prefab_entities import create_world_entity
+from src.create.world_entities_executor import WorldEntitiesExecutor
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
@@ -32,6 +33,7 @@ class GameEngine:
     def __init__(self) -> None:
         pygame.init()
         self.strategy_load_cfg = CFGLoaderExecutor()
+        self.strategy_world_entity = WorldEntitiesExecutor()
         self.clock = pygame.time.Clock()
         self.is_running = False
         self.on_pause = True
@@ -69,6 +71,15 @@ class GameEngine:
         self._clean()
 
     def _create(self):
+        self.players_entity = self.strategy_world_entity.world_entity_executor(
+            world=self.ecs_world, entity_type="PLAYER_ENTITY",
+            image=self.player_cfg.get('image'),
+            position=self.player_cfg['position'],
+            velocity=self.player_cfg['velocity'],
+            animations=self.player_cfg['animations'],
+            sound=self.player_cfg['sound']
+        )
+
         create_world_entity(
             world=self.ecs_world, component_type="STATIC_FONT",
             text=self.fonts_cfg.get('title').get('text'),
@@ -94,14 +105,7 @@ class GameEngine:
             fixed='BOTTOM_LEFT',
             energy=0
         )
-        self.players_entity = create_world_entity(
-            world=self.ecs_world, component_type="PLAYER",
-            image=self.player_cfg.get('image'),
-            position=self.player_cfg['position'],
-            velocity=self.player_cfg['velocity'],
-            animations=self.player_cfg['animations'],
-            sound=self.player_cfg['sound']
-        )
+
         create_world_entity(
             world=self.ecs_world, component_type="INPUT_COMMAND",
             name="GAME_PAUSE", key=pygame.K_p
