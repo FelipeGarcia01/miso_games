@@ -4,7 +4,6 @@ import pygame
 
 import esper
 from src.create.cfg_loader_executor import CFGLoaderExecutor
-from src.create.prefab_enemies_loader import enemies_loader_from_file
 from src.create.prefab_entities import create_world_entity
 from src.create.prefab_explosion import explosion_loader_from_file
 from src.create.prefab_fonts import fonts_loader_from_file
@@ -56,9 +55,7 @@ class GameEngine:
             self.framerate = json_window.get('framerate')
             self.background_color = json_window.get('bg_color')
             self.fonts_cfg = fonts_loader_from_file('assets/cfg/interface.json')
-            self.enemies = enemies_loader_from_file(
-                enemies_path='assets/cfg/enemies.json',
-                level_path=LEVEL_PATH)
+            self.enemies = self.strategy_load_cfg.cfg_executor(cfg_type='ENEMY_CFG', level_path=LEVEL_PATH)
             self.player_cfg = self.strategy_load_cfg.cfg_executor(cfg_type='PLAYER_CFG', level_path=LEVEL_PATH)
             self.explosion_cfg = explosion_loader_from_file(explosion_path='assets/cfg/explosion.json')
 
