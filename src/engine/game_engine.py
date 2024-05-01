@@ -5,7 +5,6 @@ import pygame
 import esper
 from src.create.cfg_loader_executor import CFGLoaderExecutor
 from src.create.prefab_entities import create_world_entity
-from src.create.prefab_fonts import fonts_loader_from_file
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
@@ -53,7 +52,7 @@ class GameEngine:
                 pygame.SCALED)
             self.framerate = json_window.get('framerate')
             self.background_color = json_window.get('bg_color')
-            self.fonts_cfg = fonts_loader_from_file('assets/cfg/interface.json')
+            self.fonts_cfg = self.strategy_load_cfg.cfg_executor(cfg_type='INTERFACE_CFG', level_path=LEVEL_PATH)
             self.enemies = self.strategy_load_cfg.cfg_executor(cfg_type='ENEMY_CFG', level_path=LEVEL_PATH)
             self.player_cfg = self.strategy_load_cfg.cfg_executor(cfg_type='PLAYER_CFG', level_path=LEVEL_PATH)
             self.explosion_cfg = self.strategy_load_cfg.cfg_executor(cfg_type='EXPLOSION_CFG', level_path=LEVEL_PATH)
